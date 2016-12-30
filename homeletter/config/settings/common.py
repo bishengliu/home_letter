@@ -41,10 +41,14 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS =[]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'users.apps.UsersConfig'
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+#custom user model
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
