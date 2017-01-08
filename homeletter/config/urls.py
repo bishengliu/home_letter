@@ -19,5 +19,11 @@ from django.views.generic import TemplateView
 from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='base.html'), {"appVersion": settings.APPVERSION, "appName": settings.APPNAME}, name="home")  # home index
+    url(r'^$',
+        TemplateView.as_view(template_name='home.html'),
+        {"appVersion": settings.APPVERSION, "appName": settings.APPNAME }, # add "messages": ["Hello World"] to pass the messages to the template
+        name="home")  # home index
+
+    # add user urls
+
 ]

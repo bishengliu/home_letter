@@ -1,4 +1,8 @@
 {% load staticfiles %}
+
+{# load custom tags in the users app #}
+{% load global_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +20,7 @@
     {% endblock css%}
 </head>
 <body>
+
 <!-- navbar-->
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -27,40 +32,42 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                      </button>
-                    <a class = "navbar-brand" href = "#">HomeLetter</a>
+                    <a class = "navbar-brand" href = "{% url 'home'%}">HomeLetter</a>
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>
-                             <a class="" href="" data-toggle="tooltip" title="Application Home">
-                                 <i class="fa fa-home"></i>
-                                 <span class="">Home</span>
-                             </a>
-                         </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title=""><span class="fa fa-search fa-lg">&ensp;</span>DropDown<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a class="" href="" data-toggle="tooltip" title="Application Home">
-                                        <i class="fa fa-home"></i>
-                                        <span class="">Home</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="" href="" data-toggle="tooltip" title="Application Home">
-                                        <i class="fa fa-home"></i>
-                                        <span class="">Home</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                    {% block navbar%}
+                        <ul class="nav navbar-nav">
+                            <li>
+                                 <a class="" href="{% url 'home'%}" data-toggle="tooltip" title="Application Home">
+                                     <i class="fa fa-home"></i>
+                                     <span class="">Home</span>
+                                 </a>
+                             </li>
+                            <!-- include navbar based on the global template tag 'app_navbar', which render navbar as string  -->
+                            {% app_navbar %}
+                        </ul>
+                    {% endblock navbar%}
+
                     <!-- user -->
                     <div class="pull-right">
                         <ul class="nav navbar-nav navbar-left">
-                            <li>
-                                <a><span class="glyphicon glyphicon-user text-info">&ensp;</span><b>UserName</b></a>
-                            </li>
+                            {% block _user%}
+                                {% if user.is_authenticated %}:
+                                    <li>
+                                        <a><span class="fa fa-user">&ensp;</span><b>{{user.username}}</b></a>
+                                    </li>
+                                    <li>
+                                        <a><span class="fa fa-sign-out">&ensp;</span><b>logout</b></a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a><span class="fa fa-user-plus">&ensp;</span><b>Register</b></a>
+                                    </li>
+                                    <li>
+                                        <a><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
+                                    </li>
+                                {% endif %}
+                            {% endblock _user%}
                         </ul>
                     </div>
                 </div>
@@ -70,26 +77,32 @@
 </div>
 
 <div class="container-fluid body-content">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
     <!-- messages-->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+            <div class="alert-dismissable alert {% if message.tags %}alert-{{ message.tags }} {% else %} alert-info{% endif %}">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }} {{message.tags}}
+            </div>
         {% endfor %}
     {% endif %}
+    </div>
+    <div class="clearfix"></div>
     <!-- body content-->
     {% block content %}
 
     {% endblock content %}
-    <!-- footer-->
+</div>
+<div class="clearfix"></div>
+<!-- footer-->
     <div class="footer navbar-fixed-bottom">
         <footer>
             {% block footer %}
-                <p class="text-center" style="margin: 0px 0px 0px 0px;">&copy; {% now "Y" %} - {{ appName }} ({{ appVersion }}). All Rights Reserved</p>
+                <p class="text-center" style="margin: 0px 0px 0px 0px;">&copy; {% now "Y" %} - {{ appName }} ({{ appVersion }}{%if debug %}, <span class="text-danger"><em> &nbsp;{% app_setting_mode %}</em></span> {%endif%}). All Rights Reserved</p>
             {% endblock footer %}
         </footer>
     </div>
-</div>
-
 <!-- javascript-->
 {% block javascript %}
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>

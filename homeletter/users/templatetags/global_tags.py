@@ -1,0 +1,26 @@
+from django import template
+from django.conf import settings
+from django.template.loader import render_to_string
+
+register = template.Library()
+
+
+@register.simple_tag
+def app_setting_mode():
+    if settings.APP_MODE == "local":
+        return "local"
+    elif settings.APP_MODE == "test":
+        return "test"
+    else:
+        return "production"
+
+
+# GET navbar based on app mode
+@register.simple_tag
+def app_navbar():
+    if settings.APP_MODE == "local":
+        return render_to_string("navbar_local.html")
+    elif settings.APP_MODE == "test":
+        return render_to_string("navbar_test.html")
+    else:
+        return render_to_string("navbar_prod.html")
