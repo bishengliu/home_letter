@@ -39,6 +39,10 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    # Useful template tags:
+    # 'django.contrib.humanize',
 ]
 
 THIRD_PARTY_APPS =[]
@@ -83,7 +87,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 
 # Database
@@ -164,3 +167,5 @@ MEDIA_URL = '/media/'
 APPNAME = 'HomeLetter'
 APPVERSION = '0.0.1'
 
+# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
+ADMIN_URL = r'^admin/'
