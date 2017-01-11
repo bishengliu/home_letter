@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.views import View
 from django.contrib.auth import hashers
-
+from django.contrib.auth import authenticate, login
 
 
 from .forms import RegistrationForm, UserForm, ProfileForm
@@ -23,25 +23,33 @@ class RegisterView(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
+            username = form.cleaned_data['username']
+            password = hashers.make_password(form.cleaned_data['password1'])
+            email = form.cleaned_data['email']
             # save user
             user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                password=hashers.make_password(form.cleaned_data['password1']),
-                email=form.cleaned_data['email']
+                username=username,
+                password=password,
+                email=email
             )
 
             # save profile
-            profile = Profile.object().create(
+            Profile.object().create(
                 user=user,
                 birth_date=form.cleaned_data['birth_date'],
-                photo=form.cleaned_data['photo']
+                # need to process file upload
+                # photo=form.cleaned_data['photo']
             )
 
-            #login user
+            # login user
+            user = authenticate(username=username, password=password)
+            if user is not None:
 
+                if user.is_active:
+                    login(request, user)
+                    return redirect('home')
 
-
-
+        return render(request, self.template_name, {'form': form})
 
 
 # update User Model and profile
@@ -79,4 +87,6 @@ def update_profile(request):
     users = User.objects.all().select_related('profile')
     REF:
     https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
+    https://mayukhsaha.wordpress.com/2013/05/09/simple-login-and-user-registration-application-using-django/
+    http://musings.tinbrain.net/blog/2014/sep/21/registration-django-easy-way/
 """

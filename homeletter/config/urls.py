@@ -31,10 +31,8 @@ urlpatterns = [
         name="home"),  # home index
 
     # User management
-    # url(r'^users$', include('users.urls', namespace="users")),
+    url(r'^users/', include('users.urls', namespace="users")),
 
-    # registration etc
-    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # allow to serve static media files during development
 

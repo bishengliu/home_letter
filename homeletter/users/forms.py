@@ -25,7 +25,8 @@ class RegistrationForm(forms.Form):
         widget=forms.SelectDateWidget(attrs=dict(required=True), empty_label=("Year", "Month", "Day")),
         label=_("Birth Date"))
     photo = forms.ImageField(
-        widget=forms.ImageField(upload_to='users/', max_length=100, null=True, blank=True),
+        max_length=100,
+        allow_empty_file=True,
         label=_("Photo"))
 
     # validation
