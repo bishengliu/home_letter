@@ -31,7 +31,7 @@ urlpatterns = [
         name="home"),  # home index
 
     # User management
-    url(r'^users$', include('users.urls', namespace="users")),
+    # url(r'^users$', include('users.urls', namespace="users")),
 
     # registration etc
     
