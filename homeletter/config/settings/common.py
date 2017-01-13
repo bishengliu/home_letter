@@ -45,7 +45,9 @@ DJANGO_APPS = [
     # 'django.contrib.humanize',
 ]
 
-THIRD_PARTY_APPS =[]
+THIRD_PARTY_APPS = [
+
+]
 
 LOCAL_APPS = [
     'users.apps.UsersConfig'

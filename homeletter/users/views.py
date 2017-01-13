@@ -3,7 +3,8 @@ from django.views.generic import CreateView
 from django.views import View
 from django.contrib.auth import hashers
 from django.contrib.auth import authenticate, login
-
+from django.core.files.storage import FileSystemStorage
+from django.db import transaction
 
 from .forms import RegistrationForm, UserForm, ProfileForm
 from .models import User, Profile
@@ -19,8 +20,9 @@ class RegisterView(View):
         form = self.form_class(None)
         return render(request, self.template_name, {'form': form})
 
+    @transaction.atomic
     def post(self, request):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
 
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -34,13 +36,28 @@ class RegisterView(View):
             )
 
             # save profile
-            Profile.object().create(
+            '''
+            # need to process file upload
+            # we can manually upload files
+            img = request.FILES['photo']
+            if img:
+                fs = FileSystemStorage()
+                filename = fs.save(img.name, img)
+                saved_url = fs.url(filename)
+
+            profile = Profile(
+                ser=user,
+                birth_date=form.cleaned_data['birth_date'],
+                #photo=saved_url # use this if I need to change the name of the file upload
+            )
+            profile.save()
+            '''
+
+            Profile.objects.create(
                 user=user,
                 birth_date=form.cleaned_data['birth_date'],
-                # need to process file upload
-                # photo=form.cleaned_data['photo']
+                photo=request.FILES['photo']  # auto upload file
             )
-
             # login user
             user = authenticate(username=username, password=password)
             if user is not None:

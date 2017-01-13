@@ -22,7 +22,7 @@ class RegistrationForm(forms.Form):
         widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False),),
         label=_("Password (again)"))
     birth_date = forms.DateField(
-        widget=forms.SelectDateWidget(attrs=dict(required=True), empty_label=("Year", "Month", "Day")),
+        widget=forms.SelectDateWidget(attrs=dict(required=False), empty_label=("Year", "Month", "Day")),
         label=_("Birth Date"))
     photo = forms.ImageField(
         max_length=100,

@@ -54,17 +54,17 @@
                             {% block _user%}
                                 {% if user.is_authenticated %}:
                                     <li>
-                                        <a><span class="fa fa-user">&ensp;</span><b>{{user.username}}</b></a>
+                                        <a href="#"><span class="fa fa-user">&ensp;</span><b>{{user.username}}</b></a>
                                     </li>
                                     <li>
-                                        <a><span class="fa fa-sign-out">&ensp;</span><b>logout</b></a>
+                                        <a href="#"><span class="fa fa-sign-out">&ensp;</span><b>logout</b></a>
                                     </li>
                                 {% else %}
                                     <li>
-                                        <a><span class="fa fa-user-plus">&ensp;</span><b>Register</b></a>
+                                        <a href="{% url 'users:register' %}"><span class="fa fa-user-plus">&ensp;</span><b>Register</b></a>
                                     </li>
                                     <li>
-                                        <a><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
+                                        <a href="#"><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
                                     </li>
                                 {% endif %}
                             {% endblock _user%}

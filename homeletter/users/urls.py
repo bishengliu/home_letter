@@ -11,4 +11,9 @@ urlpatterns = [
         name='register'
     ),
 
+url(
+        regex=r'^logout$',
+        view=views.RegisterView.as_view(),
+        name='logout'
+    ),
 ]
