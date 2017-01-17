@@ -61,50 +61,6 @@ html, body, .body-content {
     margin-bottom:4px !important;
 }
 
-/* custom font */
-@font-face{
-    font-family: Righteous;
-    src: url('/fonts/google/Righteous-Regular.ttf') format('truetype')
-}
-@font-face{
-    font-family: BalooBhaina-Regular;
-    src: url('/fonts/google/BalooBhaina-Regular.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: CherryCreamSoda;
-    src: url('/fonts/google/CherryCreamSoda.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: Lalezar-Regular;
-    src: url('/fonts/google/Lalezar-Regular.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: Mako-Regular;
-    src: url('/fonts/google/Mako-Regular.ttf') format('truetype')
-}
-/* end custom font */
-
-
-
-.jumbotron h1{
-    font-family: Lalezar-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
-}
-
-.jumbotron p{
-    font-family: Mako-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
-}
-
-.home-div legend{
-    font-family: BalooBhaina-Regular,Helvetica,Arial,sans-serif;
-}
-
-.home-div P{
-    font-family: Mako-Regular,Helvetica,Arial,sans-serif;
-}
-
 /* Override the default bootstrap behavior where horizontal description lists
    will truncate terms that are too long to fit in the left column
 */

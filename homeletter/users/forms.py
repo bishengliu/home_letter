@@ -23,10 +23,12 @@ class RegistrationForm(forms.Form):
         label=_("Password (again)"))
     birth_date = forms.DateField(
         widget=forms.SelectDateWidget(attrs=dict(required=False), empty_label=("Year", "Month", "Day")),
+        required=False,
         label=_("Birth Date"))
     photo = forms.ImageField(
         max_length=100,
         allow_empty_file=True,
+        required=False, # default True
         label=_("Photo"))
 
     # validation
@@ -47,9 +49,13 @@ class RegistrationForm(forms.Form):
 
     # validate password1/2
     def clean(self):
-        if 'password1' in self.cleaned_data['password1'] and 'password2' in self.cleaned_data['password2']:
+        super(RegistrationForm, self).clean()
+        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields did not match."))
+                msg = "The two password fields did not match."
+                self.add_error('password1', _(msg))
+                self.add_error('password2', _(msg))
+                raise forms.ValidationError(_(msg))
 
             # strong password
             """
@@ -64,7 +70,10 @@ class RegistrationForm(forms.Form):
             """
             password_pattern = re.compile("^(?=.*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$")
             if not password_pattern.match(self.cleaned_data['password1']):
-                raise forms.ValidationError(_("Password contains at least: 1 uppercase letter, 3 lowcase letters, 2 digits and must be longer than 8 characters"))
+                msg = "Password contains at least: 1 uppercase letter, 3 lowcase letters, 2 digits and must be longer than 8 characters."
+                self.add_error('password1', _(msg))
+                self.add_error('password2', _(msg))
+                raise forms.ValidationError(_(msg))
         return self.cleaned_data
 
 
