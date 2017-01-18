@@ -58,14 +58,14 @@
                                         <a href="#"><span class="fa fa-user">&ensp;</span><b>{{user.username}}</b></a>
                                     </li>
                                     <li>
-                                        <a href="#"><span class="fa fa-sign-out">&ensp;</span><b>logout</b></a>
+                                        <a href="{% url 'users:logout' %}"><span class="fa fa-sign-out">&ensp;</span><b>logout</b></a>
                                     </li>
                                 {% else %}
                                     <li>
                                         <a href="{% url 'users:register' %}"><span class="fa fa-user-plus">&ensp;</span><b>Register</b></a>
                                     </li>
                                     <li>
-                                        <a href="#"><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
+                                        <a href="% url 'users:login' %"><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
                                     </li>
                                 {% endif %}
                             {% endblock _user%}
@@ -109,16 +109,10 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
-    <script>
-        $(".datepicker").datepicker({
-            format: 'dd-M-yyyy',
-            autoclose: true,
-            startView: 'decade',
-            minView: 'decade',
-            viewSelect: 'decade',
-        });
-    </script>
-    <script src="{% static 'js/test.js' %}"></script>
+
 {% endblock javascript %}
+{% block appJs %}
+    <script src="{% static 'js/test.js' %}"></script>
+{% endblock appJs%}
 </body>
 </html>

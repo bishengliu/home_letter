@@ -1,4 +1,6 @@
 {% extends "base.html"%}
+
+{% load staticfiles %} # must be added each time
 {% block content %}
 <div class="row">
     <h3 class="text-center text-info">
@@ -114,7 +116,10 @@
 
 {% endblock content %}
 
-
+{% block appJs %}
+    <script src="{% static 'js/users/users.js' %}"></script>
+    <script src="{% static 'js/users/upload-photo.js' %}"></script>
+{% endblock appJs%}
 
 
 

@@ -10,18 +10,18 @@ function uploadSize() {
 
         //check the upload file format/exteions
         var type = $('#photo_fn')[0].files[0].type;
-        console.log(type);
-        if (type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || type == "application/vnd.ms-excel") {
+        if (type == "image/png" || type == "image/jpeg" || type == "image/tiff" || type == "image/bmp") {
             return true;
         }
         else {
-            $('#photo-msg').text('Not a valid MS excel file, only allow for ".xls", ".xlsx"!');
+            $('#photo_msg').text('Only allow for ".bmp", ".jpg", ".tiff" and ".png"!');
             return false;
         }
     }
 }
+
 function getFilePath() {
-    var fullPath = document.getElementById("#photo_fn").value;
+    var fullPath = document.getElementById("photo_fn").value;
     fileName = fullPath.split(/(\\|\/)/g).pop();
     document.getElementById("photo_name").value = fileName;
 }

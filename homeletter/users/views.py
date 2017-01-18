@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.views import View
 from django.contrib.auth import hashers
-from django.contrib.auth import authenticate, login
-from django.core.files.storage import FileSystemStorage
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+# from django.core.files.storage import FileSystemStorage # for manually upload files
 from django.db import transaction
+from django.utils.translation import ugettext_lazy as _
 
-from .forms import RegistrationForm, UserForm, ProfileForm
+from .forms import RegistrationForm, LoginForm, UserForm, ProfileForm
 from .models import User, Profile
 # Create your views here.
 
@@ -67,6 +69,43 @@ class RegisterView(View):
                     return redirect('home')
 
         return render(request, self.template_name, {'form': form})
+
+
+# login user
+class LoginView(View):
+    form_class = LoginForm
+    template_name = "users/login.html"
+
+    def get(self,request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = hashers.make_password(form.cleaned_data['password'])
+            # authenticate
+            user = authenticate(username=username, password=password)
+            #check user
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('home')
+                else:
+                    messages.add_message(request, messages.WARNING,
+                                         _('User is disabled!'))
+                    return redirect('home')
+            else:
+                messages.add_message(request, messages.WARNING, _('Login Failed! Username does not exist or password was wrong!'))
+                return redirect('home')
+        return render(request, self.template_name, {'form': form})
+
+# logout user
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home')
 
 
 # update User Model and profile

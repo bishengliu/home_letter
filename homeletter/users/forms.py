@@ -3,7 +3,7 @@ from .models import User, Profile
 from django.utils.translation import ugettext_lazy as _
 import re
 
-
+#register form
 class RegistrationForm(forms.Form):
 
     # fields
@@ -28,7 +28,8 @@ class RegistrationForm(forms.Form):
     photo = forms.ImageField(
         max_length=100,
         allow_empty_file=True,
-        required=False, # default True
+        # help_text= _('Only allow for ".bmp", ".jpg", ".tiff" and ".png"!'),
+        required=False,  # default True
         label=_("Photo"))
 
     # validation
@@ -76,6 +77,24 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(_(msg))
         return self.cleaned_data
 
+#login form
+class LoginForm(forms.Form):
+    username = forms.RegexField(
+        regex=r'^\w+$',
+        widget=forms.TextInput(attrs=dict(required=True, max_length=30), ),
+        label=_("Username"))
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False),),
+        label=_("Password"))
+
+    # validation
+    def clean_username(self):
+        try:
+            User.objects.get(username__iexact=self.cleaned_data['username'])
+            return self.cleaned_data['username']
+        except User.DoesNotExist:
+            raise forms.ValidationError(_('The username does not exist!'))
 
 # for updating forms
 class UserForm(forms.ModelForm):

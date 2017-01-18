@@ -10,10 +10,14 @@ urlpatterns = [
         view=views.RegisterView.as_view(),
         name='register'
     ),
-
-url(
+    url(
         regex=r'^logout$',
-        view=views.RegisterView.as_view(),
+        view=views.LogoutView.as_view(),
         name='logout'
+    ),
+    url(
+        regex=r'^login$',
+        view=views.LoginView.as_view(),
+        name='login'
     ),
 ]
