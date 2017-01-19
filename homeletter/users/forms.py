@@ -52,7 +52,7 @@ class RegistrationForm(forms.Form):
     def clean(self):
         super(RegistrationForm, self).clean()
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
-            if self.cleaned_data['password1'] != self.cleaned_data['password2']:
+            if self.cleaned_data.get('password1') != self.cleaned_data.get('password2'):
                 msg = "The two password fields did not match."
                 self.add_error('password1', _(msg))
                 self.add_error('password2', _(msg))
@@ -60,20 +60,27 @@ class RegistrationForm(forms.Form):
 
             # strong password
             """
-            password_pattern = re.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$")
+            password_pattern = re.compile("^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$")
             ^                         Start anchor
             (?=.*[A-Z])               Ensure string has one uppercase letter.
             (?=.*[!@#$&*])            Ensure string has one special case letter.
             (?=.*[0-9].*[0-9])        Ensure string has two digits.
             (?=.*[a-z].*[a-z].*[a-z]) Ensure string has three lowercase letters.
-            .{8}                      Ensure string is of length 8.
+            .{8,8}                    Ensure string is of length at least 8.
             $                         End anchor.
+
+            password_pattern = re.compile("^(?=.*?\d)(?=.*?[A-Z])(?=.*?[a-z])[A-Za-z\d]{8,}$")
+            (?=.*?\d) Checks for atleast one digit
+            (?=.*?[A-Z]) Atleast one uppercsae.
+            (?=.*?[a-z]) Atleast one lowercase.
+            [A-Za-z\d]{10,} Matches uppercase or lowercase or digit characters 10 or more times. This ensures that the match must have atleast 10 characters.
             """
-            password_pattern = re.compile("^(?=.*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$")
-            if not password_pattern.match(self.cleaned_data['password1']):
-                msg = "Password contains at least: 1 uppercase letter, 3 lowcase letters, 2 digits and must be longer than 8 characters."
+            password_pattern = re.compile("^(?=.*[A-Z])(?=.*[a-z].*[a-z])(?=.*[0-9].*[0-9]).{8,}$")
+            isValid = re.match(password_pattern, self.cleaned_data.get('password1'))
+            if not password_pattern.search(self.cleaned_data.get('password1')):
+                msg = "Password contains at least: 1 uppercase letter, 2 lowcase letters, 2 digits and must be longer than 8 characters."
                 self.add_error('password1', _(msg))
-                self.add_error('password2', _(msg))
+                # self.add_error('password2', _(msg))
                 raise forms.ValidationError(_(msg))
         return self.cleaned_data
 

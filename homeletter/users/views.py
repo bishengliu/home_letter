@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.views import View
-from django.contrib.auth import hashers
+# from django.contrib.auth import hashers
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 # from django.core.files.storage import FileSystemStorage # for manually upload files
@@ -27,15 +27,12 @@ class RegisterView(View):
         form = self.form_class(request.POST, request.FILES)
 
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = hashers.make_password(form.cleaned_data['password1'])
-            email = form.cleaned_data['email']
             # save user
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                email=email
-            )
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            user = User(username=username,email=email)
+            user.set_password(form.cleaned_data.get('password1'))
+            user.save()
 
             # save profile
             '''
@@ -58,12 +55,12 @@ class RegisterView(View):
             Profile.objects.create(
                 user=user,
                 birth_date=form.cleaned_data['birth_date'],
-                photo=request.FILES['photo']  # auto upload file
+
+                photo=request.FILES['photo'] if request.FILES else None   # auto upload file
             )
             # login user
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=username, password=form.cleaned_data.get('password1'))
             if user is not None:
-
                 if user.is_active:
                     login(request, user)
                     return redirect('home')
@@ -84,7 +81,7 @@ class LoginView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            password = hashers.make_password(form.cleaned_data['password'])
+            password = form.cleaned_data.get('password')
             # authenticate
             user = authenticate(username=username, password=password)
             #check user
@@ -95,10 +92,10 @@ class LoginView(View):
                 else:
                     messages.add_message(request, messages.WARNING,
                                          _('User is disabled!'))
-                    return redirect('home')
+                    return redirect('users:login')
             else:
-                messages.add_message(request, messages.WARNING, _('Login Failed! Username does not exist or password was wrong!'))
-                return redirect('home')
+                messages.add_message(request, messages.WARNING, _('Login Failed, password was incorrect!'))
+                return redirect('users:login')
         return render(request, self.template_name, {'form': form})
 
 # logout user

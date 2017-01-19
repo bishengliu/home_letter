@@ -65,7 +65,7 @@
                                         <a href="{% url 'users:register' %}"><span class="fa fa-user-plus">&ensp;</span><b>Register</b></a>
                                     </li>
                                     <li>
-                                        <a href="% url 'users:login' %"><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
+                                        <a href="{% url 'users:login' %}"><span class="fa fa-sign-in">&ensp;</span><b>login</b></a>
                                     </li>
                                 {% endif %}
                             {% endblock _user%}
@@ -84,7 +84,7 @@
         {% for message in messages %}
             <div class="alert-dismissable alert {% if message.tags %}alert-{{ message.tags }} {% else %} alert-info{% endif %}">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {{ message }} {{message.tags}}
+                {{ message }}
             </div>
         {% endfor %}
     {% endif %}
