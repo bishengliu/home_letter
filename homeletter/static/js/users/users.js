@@ -1,5 +1,5 @@
 $(".datepicker").datepicker({
-            format: 'dd-M-yyyy',
+            format: 'dd-mm-yyyy',
             autoclose: true,
             startView: 'decade',
             minView: 'decade',

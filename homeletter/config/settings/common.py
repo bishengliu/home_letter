@@ -174,3 +174,9 @@ APPVERSION = '0.0.1'
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
+
+DATE_INPUT_FORMATS = [
+    '%Y-%m-%d',      # '2006-10-25'
+    '%m/%d/%Y',      # '10/25/2006'
+    '%m/%d/%y'       # '10/25/06'
+]

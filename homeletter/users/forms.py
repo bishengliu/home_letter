@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from .models import User, Profile
 from django.utils.translation import ugettext_lazy as _
 import re
@@ -22,8 +23,9 @@ class RegistrationForm(forms.Form):
         widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False),),
         label=_("Password (again)"))
     birth_date = forms.DateField(
-        widget=forms.SelectDateWidget(attrs=dict(required=False), empty_label=("Year", "Month", "Day")),
+        #widget=forms.SelectDateWidget(attrs=dict(required=False), empty_label=("Year", "Month", "Day")),
         required=False,
+        input_formats=settings.DATE_INPUT_FORMATS,
         label=_("Birth Date"))
     photo = forms.ImageField(
         max_length=100,

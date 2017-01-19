@@ -20,4 +20,9 @@ urlpatterns = [
         view=views.LoginView.as_view(),
         name='login'
     ),
+    url(
+        regex=r'^(?P<pk>\d+)/$',
+        view=views.UpdateView.as_view(),
+        name='update'
+    ),
 ]

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView
+from django.views.generic import UpdateView
 from django.views import View
 # from django.contrib.auth import hashers
 from django.contrib.auth import authenticate, login, logout
@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .forms import RegistrationForm, LoginForm, UserForm, ProfileForm
 from .models import User, Profile
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -73,7 +74,7 @@ class LoginView(View):
     form_class = LoginForm
     template_name = "users/login.html"
 
-    def get(self,request):
+    def get(self, request):
         form = self.form_class(None)
         return render(request, self.template_name, {'form': form})
 
@@ -98,14 +99,38 @@ class LoginView(View):
                 return redirect('users:login')
         return render(request, self.template_name, {'form': form})
 
+
 # logout user
 class LogoutView(View):
+
     def get(self, request):
         logout(request)
         return redirect('home')
 
 
 # update User Model and profile
+class UpdateView(View):
+    template_name = "users/update.html"
+    def post(self, request):
+        uf = UserForm(request.POST, prefix='user')
+        upf = ProfileForm(request.POST, prefix="profile")
+
+        if uf.is_valid() and upf.is_valid():
+            pass
+        return render(request, self.template_name, {'uf': uf, 'upf': upf})
+
+    def get(self, request, pk):
+        user = User.objects.get(pk=pk).select_related('profile')
+
+        uf = UserForm(instance=user, prefix='user')
+        upf = ProfileForm(instance=request.user.profile, prefix="profile")
+        return render(request, self.template_name, {'uf': uf, 'upf': upf})
+
+
+
+
+
+
 """
 @login_required
 @transaction.atomic
