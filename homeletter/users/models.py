@@ -21,7 +21,7 @@ class Profile(models.Model):
 
     # display photo in the admin
     def photo_tag(self):
-        return mark_safe('<img src="/directory/%s" width="150" height="150" />' % self.photo)
+        return mark_safe('<img src="/media/%s" width="150" height="150" />' % self.photo)
 
     photo_tag.short_description = _('My Photo')
 

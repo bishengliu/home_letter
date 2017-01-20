@@ -31,7 +31,9 @@ class RegisterView(View):
             # save user
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
-            user = User(username=username,email=email)
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            user = User(username=username,email=email,first_name=first_name,last_name=last_name)
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
 
@@ -56,7 +58,6 @@ class RegisterView(View):
             Profile.objects.create(
                 user=user,
                 birth_date=form.cleaned_data['birth_date'],
-
                 photo=request.FILES['photo'] if request.FILES else None   # auto upload file
             )
             # login user
@@ -111,20 +112,36 @@ class LogoutView(View):
 # update User Model and profile
 class UpdateView(View):
     template_name = "users/update.html"
-    def post(self, request):
-        uf = UserForm(request.POST, prefix='user')
-        upf = ProfileForm(request.POST, prefix="profile")
+
+    def post(self, request, pk):
+        uf = UserForm(request.POST,instance=User())
+        upf = ProfileForm(request.POST, instance=Profile())
 
         if uf.is_valid() and upf.is_valid():
-            pass
-        return render(request, self.template_name, {'uf': uf, 'upf': upf})
+            uf.save()
+            upf.save()
+            messages.success(request, _('Your profile was successfully updated!'))
+
+        # get user and profile
+        user = get_object_or_404(User, pk=pk)
+        profile = user.profile
+        photo_url = profile.photo.url if profile.photo else ''  # photo url
+        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
 
     def get(self, request, pk):
-        user = User.objects.get(pk=pk).select_related('profile')
-
-        uf = UserForm(instance=user, prefix='user')
-        upf = ProfileForm(instance=request.user.profile, prefix="profile")
-        return render(request, self.template_name, {'uf': uf, 'upf': upf})
+        user = get_object_or_404(User, pk=pk)
+        try:
+            profile = user.profile
+        except Profile.DoesNotExist:
+            # create profile if not exist
+            profile = Profile.objects.create(
+                user=user,
+                photo=None  # auto upload file
+            )
+        upf = ProfileForm(instance=profile)
+        photo_url = profile.photo.url if profile.photo else ''
+        uf = UserForm(instance=user)
+        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url })
 
 
 

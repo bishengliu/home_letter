@@ -4,7 +4,8 @@ from .models import User, Profile
 from django.utils.translation import ugettext_lazy as _
 import re
 
-#register form
+
+# register form
 class RegistrationForm(forms.Form):
 
     # fields
@@ -22,8 +23,19 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False),),
         label=_("Password (again)"))
+    first_name = forms.RegexField(
+        regex=r'^\w+$',
+        widget=forms.TextInput(attrs=dict(required=False, max_length=30), ),
+        required=False,
+        label=_("First Name"),
+        error_message={'invalid': _("First Name contains only letters, numbers and underscores.")})
+    last_name = forms.RegexField(
+        regex=r'^\w+$',
+        widget=forms.TextInput(attrs=dict(required=False, max_length=30), ),
+        required=False,
+        label=_("Last Name"),
+        error_message={'invalid': _("Last Name contains only letters, numbers and underscores.")})
     birth_date = forms.DateField(
-        #widget=forms.SelectDateWidget(attrs=dict(required=False), empty_label=("Year", "Month", "Day")),
         required=False,
         input_formats=settings.DATE_INPUT_FORMATS,
         label=_("Birth Date"))
@@ -86,7 +98,8 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(_(msg))
         return self.cleaned_data
 
-#login form
+
+# login form
 class LoginForm(forms.Form):
     username = forms.RegexField(
         regex=r'^\w+$',
@@ -105,8 +118,28 @@ class LoginForm(forms.Form):
         except User.DoesNotExist:
             raise forms.ValidationError(_('The username does not exist!'))
 
+
 # for updating forms
 class UserForm(forms.ModelForm):
+    # validation
+    def clean_first_name(self):
+        name_pattern=re.compile("^\w+$")
+        is_valid = re.match(name_pattern, self.cleaned_data.get('first_name'))
+        if not is_valid:
+            msg = "First Name contains only letters, numbers and underscores."
+            raise forms.ValidationError(_(msg))
+
+    def clean_last_name(self):
+        name_pattern=re.compile("^\w+$")
+        is_valid = re.match(name_pattern, self.cleaned_data.get('last_name'))
+        if not is_valid:
+            msg = "Last Name contains only letters, numbers and underscores."
+            raise forms.ValidationError(_(msg))
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
 
     class Meta:
         model = User
@@ -114,6 +147,11 @@ class UserForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.fields['birth_date'].required = True
+        self.fields['birth_date'].input_formats=settings.DATE_INPUT_FORMATS
 
     class Meta:
         model = Profile
