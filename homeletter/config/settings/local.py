@@ -4,7 +4,7 @@ Local settings
 - Run in Debug mode
 
 """
-
+# from django.conf.locale.en import formats as en_formats
 from .common import *
 
 # some variables, must be all capitals
@@ -19,3 +19,8 @@ INTERNAL_IPS = (
     '0.0.0.0',
     '127.0.0.1',
 )
+
+# message level
+MESSAGE_LEVEL = 10  # DEBUG
+
+# en_formats.DATE_FORMAT = "d-m-Y"

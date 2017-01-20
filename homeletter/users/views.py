@@ -1,17 +1,15 @@
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from django.views import View
-# from django.contrib.auth import hashers
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 # from django.core.files.storage import FileSystemStorage # for manually upload files
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
-
 from .forms import RegistrationForm, LoginForm, UserForm, ProfileForm
 from .models import User, Profile
 from django.shortcuts import get_object_or_404
-# Create your views here.
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # register user
@@ -86,7 +84,7 @@ class LoginView(View):
             password = form.cleaned_data.get('password')
             # authenticate
             user = authenticate(username=username, password=password)
-            #check user
+            # check user
             if user is not None:
                 if user.is_active:
                     login(request, user)
@@ -109,27 +107,55 @@ class LogoutView(View):
         return redirect('home')
 
 
-# update User Model and profile
-class UpdateView(View):
+# update user model and profile
+class UpdateView(LoginRequiredMixin, View):
     template_name = "users/update.html"
 
+    @transaction.atomic
     def post(self, request, pk):
-        uf = UserForm(request.POST,instance=User())
-        upf = ProfileForm(request.POST, instance=Profile())
+        uf = UserForm(request.POST)
+        upf = ProfileForm(request.POST)
 
         if uf.is_valid() and upf.is_valid():
-            uf.save()
-            upf.save()
+            # update user info
+            user = get_object_or_404(User, pk=pk)
+            user.first_name = uf.cleaned_data['first_name']
+            user.last_name = uf.cleaned_data['last_name']
+            user.email = uf.cleaned_data['email']
+            user.save()
+            # update profile
+            profile = user.profile
+            profile.birth_date = upf.cleaned_data['birth_date']
+            profile.user = user
+            if request.FILES:
+                if profile.photo:
+                    profile.photo.delete()
+                profile.photo = request.FILES['photo']
+            profile.save()
+
             messages.success(request, _('Your profile was successfully updated!'))
 
         # get user and profile
         user = get_object_or_404(User, pk=pk)
         profile = user.profile
         photo_url = profile.photo.url if profile.photo else ''  # photo url
+        uf = UserForm(instance=user)
+        upf = ProfileForm(instance=profile)
         return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
 
     def get(self, request, pk):
-        user = get_object_or_404(User, pk=pk)
+        # check the user
+        user = request.user
+        try:
+            u = User.objects.get(pk=pk)
+            if u.pk != user.pk:
+                messages.warning(request, 'Permission Denied!')
+                return redirect('home')
+        except User.DoesNotExist:
+            messages.warning(request, 'Permission Denied!')
+            return redirect('home')
+
+        # get the profile
         try:
             profile = user.profile
         except Profile.DoesNotExist:
@@ -141,47 +167,4 @@ class UpdateView(View):
         upf = ProfileForm(instance=profile)
         photo_url = profile.photo.url if profile.photo else ''
         uf = UserForm(instance=user)
-        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url })
-
-
-
-
-
-
-"""
-@login_required
-@transaction.atomic
-def update_profile(request):
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, _('Your profile was successfully updated!'))
-            return redirect('settings:profile')
-        else:
-            messages.error(request, _('Please correct the error below.'))
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profiles/profile.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-    })
-
-
-    //in html
-    <form method="post">
-      {% csrf_token %}
-      {{ user_form.as_p }}
-      {{ profile_form.as_p }}
-      <button type="submit">Save changes</button>
-    </form>
-
-    users = User.objects.all().select_related('profile')
-    REF:
-    https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
-    https://mayukhsaha.wordpress.com/2013/05/09/simple-login-and-user-registration-application-using-django/
-    http://musings.tinbrain.net/blog/2014/sep/21/registration-django-easy-way/
-"""
+        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})

@@ -3,21 +3,10 @@
 {% load staticfiles %} # must be added each time if need static file in the template
 {% block content %}
 
-<form class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit = "return uploadSize();">
-    {% csrf_token %}
-{{uf}}
-{{upf}}
-    <button type="submit" class="btn btn-default btn-block">
-                    <i class="fa fa-user"></i>
-                    <span>Update</span>
-                </button>
-</form>
-<!--
-
 <div class="row">
     <h3 class="text-center text-info">
-        <i class="fa fa-user"></i>
-        <span>Update Personal Details</span>
+        <i class="fa fa-user-circle-o"></i>
+        <span>Personal Details</span>
     </h3>
 </div>
 <div class="row">
@@ -38,7 +27,7 @@
                 </span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ uf.first_name.id_for_label}}">First Name</label>
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
                 <input class="form-control" type="text" id="{{ uf.first_name.id_for_label}}" name="{{uf.first_name.html_name}}" value="{{uf.first_name.value|default_if_none:''}}">
@@ -52,7 +41,7 @@
                 </span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ uf.last_name.id_for_label}}">Last Name</label>
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
                 <input class="form-control" type="text" id="{{ uf.last_name.id_for_label}}" name="{{uf.last_name.html_name}}" value="{{uf.last_name.value|default_if_none:''}}">
@@ -66,10 +55,10 @@
                 </span>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
             <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ upf.birth_date.id_for_label}}">Birth Date</label>
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
-                <input class="form-control datepicker" type="text" id="{{ upf.birth_date.id_for_label}}" name="{{upf.birth_date.html_name}}" value="{{upf.birth_date.value|default_if_none:''}}">
+                <input class="form-control datepicker" type="text" id="{{ upf.birth_date.id_for_label}}" name="{{upf.birth_date.html_name}}" value="{{upf.birth_date.value| date:'m-d-Y'|default_if_none:''}}">
                 <span class="help-inline text-danger">
                     {% for error in upf.birth_date.errors %}{{ error }}{% endfor %}
                 </span>
@@ -118,8 +107,6 @@
         </div>
     </form>
 </div>
--->
-
 
 {% endblock content %}
 {% block appJs %}

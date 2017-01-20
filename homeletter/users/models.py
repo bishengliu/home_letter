@@ -25,6 +25,9 @@ class Profile(models.Model):
 
     photo_tag.short_description = _('My Photo')
 
+    def __str__(self):
+        return self.user.username
+
     # hook with User model
     # @receiver(post_save, sender=User)
     # def create_user_profile(sender, instance, created, **kwargs):

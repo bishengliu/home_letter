@@ -90,7 +90,7 @@ class RegistrationForm(forms.Form):
             [A-Za-z\d]{10,} Matches uppercase or lowercase or digit characters 10 or more times. This ensures that the match must have atleast 10 characters.
             """
             password_pattern = re.compile("^(?=.*[A-Z])(?=.*[a-z].*[a-z])(?=.*[0-9].*[0-9]).{8,}$")
-            isValid = re.match(password_pattern, self.cleaned_data.get('password1'))
+            # isValid = re.match(password_pattern, self.cleaned_data.get('password1'))
             if not password_pattern.search(self.cleaned_data.get('password1')):
                 msg = "Password contains at least: 1 uppercase letter, 2 lowcase letters, 2 digits and must be longer than 8 characters."
                 self.add_error('password1', _(msg))
@@ -123,18 +123,20 @@ class LoginForm(forms.Form):
 class UserForm(forms.ModelForm):
     # validation
     def clean_first_name(self):
-        name_pattern=re.compile("^\w+$")
+        name_pattern = re.compile("^\w+$")
         is_valid = re.match(name_pattern, self.cleaned_data.get('first_name'))
         if not is_valid:
             msg = "First Name contains only letters, numbers and underscores."
             raise forms.ValidationError(_(msg))
+        return self.cleaned_data['first_name']
 
     def clean_last_name(self):
-        name_pattern=re.compile("^\w+$")
+        name_pattern = re.compile("^\w+$")
         is_valid = re.match(name_pattern, self.cleaned_data.get('last_name'))
         if not is_valid:
             msg = "Last Name contains only letters, numbers and underscores."
             raise forms.ValidationError(_(msg))
+        return self.cleaned_data['last_name']
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -148,10 +150,11 @@ class UserForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
 
+    birth_date = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['birth_date'].required = True
-        self.fields['birth_date'].input_formats=settings.DATE_INPUT_FORMATS
 
     class Meta:
         model = Profile
