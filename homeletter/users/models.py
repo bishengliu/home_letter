@@ -21,20 +21,10 @@ class Profile(models.Model):
 
     # display photo in the admin
     def photo_tag(self):
-        return mark_safe('<img src="/media/%s" width="150" height="150" />' % self.photo)
-
-    photo_tag.short_description = _('My Photo')
+        if self.photo:
+            return mark_safe('<img src="/media/%s" width="50" height="50" />' % self.photo)
+        else:
+            return ''
 
     def __str__(self):
         return self.user.username
-
-    # hook with User model
-    # @receiver(post_save, sender=User)
-    # def create_user_profile(sender, instance, created, **kwargs):
-    #    if created:
-    #        Profile.objects.create(user=instance)
-
-    # @receiver(post_save, sender=User)
-    # def save_user_profile(sender, instance, **kwargs):
-    #   instance.profile.save()
-
