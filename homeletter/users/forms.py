@@ -1,5 +1,6 @@
 from django import forms
 from django.conf import settings
+from django.contrib.auth import authenticate
 from .models import User, Profile
 from django.utils.translation import ugettext_lazy as _
 import re
@@ -7,7 +8,6 @@ import re
 
 # register form
 class RegistrationForm(forms.Form):
-
     # fields
     username = forms.RegexField(
         regex=r'^\w+$',
@@ -92,7 +92,8 @@ class RegistrationForm(forms.Form):
             password_pattern = re.compile("^(?=.*[A-Z])(?=.*[a-z].*[a-z])(?=.*[0-9].*[0-9]).{8,}$")
             # isValid = re.match(password_pattern, self.cleaned_data.get('password1'))
             if not password_pattern.search(self.cleaned_data.get('password1')):
-                msg = "Password contains at least: 1 uppercase letter, 2 lowcase letters, 2 digits and must be longer than 8 characters."
+                msg = "Password contains at least: " \
+                      "1 uppercase letter, 2 lowercase letters, 2 digits and must be longer than 8 characters."
                 self.add_error('password1', _(msg))
                 # self.add_error('password2', _(msg))
                 raise forms.ValidationError(_(msg))
@@ -159,6 +160,84 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('birth_date', 'photo')
+
+
+# change password form
+class PasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False), ),
+        label=_("Current Password"))
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False), ),
+        label=_("New Password"))
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs=dict(required=True, max_length=30, render_value=False), ),
+        label=_("New Password (again)"))
+
+    # add user
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(PasswordForm, self).__init__(*args, **kwargs)
+
+    # validation
+    def clean_password(self):
+        if self.user:
+            username = self.user.username
+            try:
+                if not authenticate(username=username, password=self.cleaned_data['password']):
+                    raise forms.ValidationError(_('Current password is incorrect!'))
+            except:
+                raise forms.ValidationError(_('Current password is incorrect!'))
+
+        return self.cleaned_data['password']
+
+    # validate password1/2
+    def clean(self):
+        super(PasswordForm, self).clean()
+        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
+            if self.cleaned_data.get('password1') != self.cleaned_data.get('password2'):
+                msg = "The two password fields did not match."
+                self.add_error('password1', _(msg))
+                self.add_error('password2', _(msg))
+                raise forms.ValidationError(_(msg))
+
+            password_pattern = re.compile("^(?=.*[A-Z])(?=.*[a-z].*[a-z])(?=.*[0-9].*[0-9]).{8,}$")
+            if not password_pattern.search(self.cleaned_data.get('password1')):
+                msg = "Password contains at least: " \
+                          "1 uppercase letter, 2 lowercase letters, 2 digits and must be longer than 8 characters."
+                self.add_error('password1', _(msg))
+                raise forms.ValidationError(_(msg))
+        return self.cleaned_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

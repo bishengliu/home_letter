@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
-from django.views.generic import UpdateView
 from django.views import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 # from django.core.files.storage import FileSystemStorage # for manually upload files
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
-from .forms import RegistrationForm, LoginForm, UserForm, ProfileForm
+from .forms import RegistrationForm, LoginForm, UserForm, ProfileForm, PasswordForm
 from .models import User, Profile
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -168,3 +167,33 @@ class UpdateView(LoginRequiredMixin, View):
         photo_url = profile.photo.url if profile.photo else ''
         uf = UserForm(instance=user)
         return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
+
+
+# change password
+class PasswordView(LoginRequiredMixin, View):
+    template_name = "users/password.html"
+    form_class = PasswordForm
+
+    def get(self, request, *args, **kwargs):
+        form = PasswordForm(user=request.user)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = PasswordForm(request.POST, user=request.user)
+
+        if form.is_valid():
+            user = request.user
+            user.set_password(form.cleaned_data.get('password1'))
+            user.save()
+            messages.success(request, _('Your password was successfully changed!'))
+            return redirect('home')
+        else:
+            return render(request, self.template_name, {'form': form})
+
+
+
+
+
+
+
+
