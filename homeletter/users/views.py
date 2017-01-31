@@ -110,14 +110,35 @@ class LogoutView(View):
 class UpdateView(LoginRequiredMixin, View):
     template_name = "users/update.html"
 
+    def get(self, request, *args, **kwargs):
+        # get the user
+        user = request.user
+        # user form
+        uf = UserForm(instance=user)
+        # get the profile
+        try:
+            profile = user.profile
+        except Profile.DoesNotExist:
+            # create profile if not exist
+            profile = Profile.objects.create(
+                user=user,
+                photo=None  # auto upload file
+            )
+        # profile form
+        upf = ProfileForm(instance=profile)
+        photo_url = profile.photo.url if profile.photo else ''
+        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
+
     @transaction.atomic
-    def post(self, request, pk):
+    def post(self, request, *args, **kwargs):
+        # get the user
+        user = request.user
+        # forms
         uf = UserForm(request.POST)
         upf = ProfileForm(request.POST)
 
         if uf.is_valid() and upf.is_valid():
             # update user info
-            user = get_object_or_404(User, pk=pk)
             user.first_name = uf.cleaned_data['first_name']
             user.last_name = uf.cleaned_data['last_name']
             user.email = uf.cleaned_data['email']
@@ -131,41 +152,13 @@ class UpdateView(LoginRequiredMixin, View):
                     profile.photo.delete()
                 profile.photo = request.FILES['photo']
             profile.save()
-
             messages.success(request, _('Your profile was successfully updated!'))
 
         # get user and profile
-        user = get_object_or_404(User, pk=pk)
         profile = user.profile
         photo_url = profile.photo.url if profile.photo else ''  # photo url
         uf = UserForm(instance=user)
         upf = ProfileForm(instance=profile)
-        return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
-
-    def get(self, request, pk):
-        # check the user
-        user = request.user
-        try:
-            u = User.objects.get(pk=pk)
-            if u.pk != user.pk:
-                messages.warning(request, 'Permission Denied!')
-                return redirect('home')
-        except User.DoesNotExist:
-            messages.warning(request, 'Permission Denied!')
-            return redirect('home')
-
-        # get the profile
-        try:
-            profile = user.profile
-        except Profile.DoesNotExist:
-            # create profile if not exist
-            profile = Profile.objects.create(
-                user=user,
-                photo=None  # auto upload file
-            )
-        upf = ProfileForm(instance=profile)
-        photo_url = profile.photo.url if profile.photo else ''
-        uf = UserForm(instance=user)
         return render(request, self.template_name, {'uf': uf, 'upf': upf, 'photo': photo_url})
 
 
