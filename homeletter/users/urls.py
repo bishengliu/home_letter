@@ -1,10 +1,8 @@
 from django.conf.urls import url
 from . import views
 
-
-urlpatterns = [
-
-    # registration
+'''
+# registration
     url(
         regex=r'^register$',
         view=views.RegisterView.as_view(),
@@ -20,6 +18,8 @@ urlpatterns = [
         view=views.LoginView.as_view(),
         name='login'
     ),
+'''
+urlpatterns = [
     url(
         regex=r'^(?P<pk>\d+)/$',
         view=views.UpdateView.as_view(),

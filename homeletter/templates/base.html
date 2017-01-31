@@ -79,14 +79,14 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="{% url 'users:logout' %}"><span class="fa fa-sign-out"></span> Logout</a>
+                                        <a href="{% url 'logout' %}"><span class="fa fa-sign-out"></span> Logout</a>
                                     </li>
                                 {% else %}
                                     <li>
-                                        <a href="{% url 'users:register' %}"><span class="fa fa-user-plus"></span>&nbsp;Register</a>
+                                        <a href="{% url 'register' %}"><span class="fa fa-user-plus"></span>&nbsp;Register</a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'users:login' %}"><span class="fa fa-sign-in"></span> Login</a>
+                                        <a href="{% url 'login' %}"><span class="fa fa-sign-in"></span> Login</a>
                                     </li>
                                 {% endif %}
                             {% endblock _user%}

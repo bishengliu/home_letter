@@ -30,7 +30,7 @@ class RegisterView(View):
             email = form.cleaned_data['email']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
-            user = User(username=username,email=email,first_name=first_name,last_name=last_name)
+            user = User(username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
 
@@ -91,10 +91,10 @@ class LoginView(View):
                 else:
                     messages.add_message(request, messages.WARNING,
                                          _('User is disabled!'))
-                    return redirect('users:login')
+                    return redirect('login')
             else:
                 messages.add_message(request, messages.WARNING, _('Login Failed, password was incorrect!'))
-                return redirect('users:login')
+                return redirect('login')
         return render(request, self.template_name, {'form': form})
 
 
