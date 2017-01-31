@@ -27,12 +27,14 @@ urlpatterns = [
     # home page
     url(r'^$',
         TemplateView.as_view(template_name='home.html'),
-        {"appVersion": settings.APPVERSION, "appName": settings.APPNAME }, # add "messages": ["Hello World"] to pass the messages to the template
+        {"appVersion": settings.APPVERSION, "appName": settings.APPNAME}, # add "messages": ["Hello World"] to pass the messages to the template
         name="home"),  # home index
 
     # User management
     url(r'^users/', include('users.urls', namespace="users")),
 
+    # LETTER MANAGEMENT
+    url(r'letters/', include('letters.urls', namespace="letters"))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # allow to serve static media files during development
 
