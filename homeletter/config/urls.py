@@ -34,7 +34,7 @@ urlpatterns = [
         name="home"),  # home index
 
     # User management
-    url(r'^users/', include('users.urls', namespace="users")),
+    url(r'^user/', include('users.urls', namespace="users")),
 
     # register
     url(
@@ -55,11 +55,13 @@ urlpatterns = [
         name='login'
     ),
 
-
     # LETTER MANAGEMENT
-    #url(r'letters/', include('letters.urls', namespace="letters")),
+    #url(r'letter/', include('letters.urls', namespace="letter")),
+    # CATEGORY MANAGEMENT
+    #url(r'category/', include('letters.urls_category', namespace="category")),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # allow to serve static media files during development
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# allow to serve static media files during development
 
 
 # for viewing these pages when DEBUG is true
