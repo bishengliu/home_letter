@@ -51,7 +51,8 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'users.apps.UsersConfig',
-    'letters.apps.LettersConfig'
+    'letters.apps.LettersConfig',
+    'category.apps.CategoryConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

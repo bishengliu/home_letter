@@ -24,3 +24,7 @@ INTERNAL_IPS = (
 MESSAGE_LEVEL = 10  # DEBUG
 
 # en_formats.DATE_FORMAT = "d-m-Y"
+
+# uncomment below to before deploying the application
+# ALLOWED_HOSTS = ['*']
+# DEBUG = False

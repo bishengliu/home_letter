@@ -57,7 +57,7 @@ urlpatterns = [
     # CATEGORY MANAGEMENT
     url(r'category/', include('category.urls', namespace="category")),
     # LETTER MANAGEMENT
-    url(r'letter/', include('letters.urls', namespace="letter")),
+    # url(r'letter/', include('letters.urls', namespace="letters")),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,3 +1,4 @@
+# https://docs.djangoproject.com/en/1.10/howto/custom-template-tags/
 from django import template
 from django.conf import settings
 from django.template.loader import render_to_string
