@@ -9,7 +9,7 @@
     </h3>
 </div>
 <div class="row">
-    <form class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit = "return uploadSize();">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="clearfix"></div>
         <div class="form-group required">
@@ -116,7 +116,7 @@
                 <div class="input-group wideForm">
                     <input type="text" class="form-control" id="{{form.photo.html_name}}_name" readonly>
                     <span class="input-group-btn">
-                        <label class="btn btn-primary btn-file">Browse <input type="file" name="{{form.photo.html_name}}" id="{{form.photo.html_name}}_fn" onchange="getFilePath()" class="hidden"></label>
+                        <label class="btn btn-primary btn-file">Browse <input type="file" name="{{form.photo.html_name}}" id="{{form.photo.html_name}}_fn" class="hidden"></label>
                     </span>
                  </div>
                 <small><p id="{{form.photo.html_name}}_msg" class="text-danger "></p></small>
@@ -146,7 +146,8 @@
 
 {% block appJs %}
     <script src="{% static 'js/users/users.js' %}"></script>
-    <script src="{% static 'js/users/upload-photo.js' %}"></script>
+    <script src="{% static 'js/upload_image.js' %}"></script>
+    <script src="{% static 'js/users/upload_photo.js' %}"></script>
 {% endblock appJs%}
 
 

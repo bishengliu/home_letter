@@ -27,7 +27,6 @@ class CategoryCreateView(LoginRequiredMixin, ActionMixin, View):
     def get(self, request, *args, **kwargs):
         # validate user permission
         # user = request.user
-
         form = CategoryForm()
         return render(request, self.template_name, {'form': form})
 
@@ -43,7 +42,7 @@ class CategoryCreateView(LoginRequiredMixin, ActionMixin, View):
                 Category.objects.create(
                     name=name,
                     icon=icon,
-                    date=datetime.date(),
+                    date=datetime.now(),
                     in_use=False,
                     user=user,
                     note=note
