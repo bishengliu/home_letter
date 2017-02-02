@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    # manage letter categories
     url(
         regex=r'^$',
         view=views.IndexView.as_view(),
@@ -22,5 +23,4 @@ urlpatterns = [
         view=views.DeleteView.as_view(),
         name='delete'
     )
-
 ]

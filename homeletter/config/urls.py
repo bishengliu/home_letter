@@ -54,11 +54,11 @@ urlpatterns = [
         view=users_view.LoginView.as_view(),
         name='login'
     ),
-
-    # LETTER MANAGEMENT
-    #url(r'letter/', include('letters.urls', namespace="letter")),
     # CATEGORY MANAGEMENT
-    #url(r'category/', include('letters.urls_category', namespace="category")),
+    url(r'category/', include('category.urls', namespace="category")),
+    # LETTER MANAGEMENT
+    url(r'letter/', include('letters.urls', namespace="letter")),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # allow to serve static media files during development
