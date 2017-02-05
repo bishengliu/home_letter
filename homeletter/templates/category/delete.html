@@ -4,11 +4,62 @@
 <div class="">
     <h3 class="text-info"><i class="fa fa-trash-o"></i><span> Category</span></h3>
 </div>
+<div class="panel-group">
+    <div class="panel panel-info">
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+            <div class="table-responsible">
+                <table class="table table-hover table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>ICON</th>
+                        <th>NAME</th>
+                        <th>CREATED DATE</th>
+                        <th>CREATED BY</th>
+                        <th>DESCRIPTION</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {% if object.icon %}
+                                    <img src="{{object.icon.url}}" class="img-circle" alt="{{object.name}}" width="50" height="50">
+                                {% endif %}
+
+                            </td>
+                            <td>{{object.name}}</td>
+                            <td>{{object.date}}</td>
+                            <td>{{object.user}}</td>
+                            <td>{{object.note|linebreaks}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="col-xs-12 col-sm-8">
+                <h4 class="text-danger">Are you sure to delete letter category: {{object}}?</h4>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <form method="POST" action="{% url 'category:delete' pk=object.pk %}" class="pull-right">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">
+                        <i class="fa fa-trash-o"></i>
+                        <span>DELETE</span>
+                    </button>
+                    |
+                    <a class="btn btn-default" href="{% url 'category:index' %}">
+                        <i class="fa fa-caret-left"></i>
+                        <span>CANCEL</span>
+                    </a>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
 
 
-<form method="POST" action="">
-   {% csrf_token %}
-    <input class="btn btn-primary" type="submit" value="DELETE">
-</form>
+
 
 {% endblock content %}

@@ -5,7 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView
 from datetime import datetime
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+
 
 from .models import Category
 from .forms import CategoryForm
@@ -92,10 +95,22 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     template_name = "category/delete.html"
     success_message = _("Category Deleted Successfully!")
+    success_url = reverse_lazy('category:index')
+
+    def get_object(self, queryset=None):
+        obj = super(CategoryDeleteView, self).get_object()
+        if obj.in_use:
+            raise Http404
+        return obj
 
     def delete(self, request, *args, **kwargs):
-        messages.success(self.request, self.success_message)
         super(CategoryDeleteView, self).delete(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return reverse_lazy('category:index')
+
+"""
+        self.object = get_object_or_404(Category, pk=kwargs['pk'])
+        success_url = self.get_success_url()
+        return HttpResponseRedirect(success_url)
+"""
+
+

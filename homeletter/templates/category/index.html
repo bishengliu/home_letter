@@ -30,7 +30,11 @@
         <tbody>
         {% for category in object_list %}
             <tr>
-                <td><img src="{{category.icon.url}}" class="img-circle" alt="{{category.name}}" width="50" height="50"></td>
+                <td>
+                    {% if category.icon %}
+                        <img src="{{category.icon.url}}" class="img-circle" alt="{{category.name}}" width="50" height="50">
+                    {% endif %}
+                </td>
                 <td>{{category.name}}</td>
                 <td>{{category.date}}</td>
                 <td>{{category.user}}</td>
@@ -51,7 +55,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     <span class="text-center text-danger">NO CATEGORY FOUND!</span>
                 </td>
             </tr>
