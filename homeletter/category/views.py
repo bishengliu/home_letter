@@ -3,10 +3,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from django.views.generic import UpdateView, ListView, DeleteView
 from datetime import datetime
+from django.urls import reverse_lazy
 
 from .models import Category
 from .forms import CategoryForm
+
 
 # mixin for message
 class ActionMixin(object):
@@ -15,18 +18,25 @@ class ActionMixin(object):
     def success_msg(self):
         return NotImplemented
 
+    @property
+    def fail_msg(self):
+        return NotImplemented
+
     def form_valid(self, form):
         messages.info(self.request, self.success_msg)
         return super(ActionMixin, self).form_valid(form)
 
+    def form_invalid(self, form):
+        messages.info(self.request, self.fail_msg)
+        return super(ActionMixin, self).form_invalid(form)
 
-class CategoryCreateView(LoginRequiredMixin, ActionMixin, View):
-    template_name = "category/create.html"
+
+class CategoryCreateView(LoginRequiredMixin, View):
+    # validate user permission using mixin
+    template_name = "category/form.html"
     form_class = CategoryForm
 
     def get(self, request, *args, **kwargs):
-        # validate user permission
-        # user = request.user
         form = CategoryForm()
         return render(request, self.template_name, {'form': form})
 
@@ -38,8 +48,9 @@ class CategoryCreateView(LoginRequiredMixin, ActionMixin, View):
             name = form.cleaned_data['name']
             note = form.cleaned_data['note']
             icon = request.FILES['icon'] if request.FILES else None # no need to change the icon name
+
             try:
-                Category.objects.create(
+                category = Category.objects.create(
                     name=name,
                     icon=icon,
                     date=datetime.now(),
@@ -48,14 +59,43 @@ class CategoryCreateView(LoginRequiredMixin, ActionMixin, View):
                     note=note
                 )
                 messages.success(request, _('Category Created!'))
-                return render(request, self.template_name, {'form': form})
+                return redirect('category:index')
             except:
                 messages.info(request, _('Something went wrong, please try again!'))
                 if icon is not None:
-                    icon.delete()
-                return render(request, self.template_name, {'form': form})
+                    category.icon.delete()
+                return redirect('category:index')
         else:
             return render(request, self.template_name, {'form': form})
 
 
+class CategoryEditView(LoginRequiredMixin, ActionMixin, UpdateView):
+    # validate user permission using mixin
+    template_name = "category/form.html"
+    form_class = CategoryForm
+    model = Category
 
+    success_msg = _("Category Updated Successfully!")
+    fail_msg = _('Something went wrong, please try again later!')
+
+    def form_valid(self, form):
+        form.icon = self.request.FILES['icon'] if self.request.FILES else None # no need to change the icon name
+        return super(CategoryEditView, self).form_valid(form)
+
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = "category/index.html"
+
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    template_name = "category/delete.html"
+    success_message = _("Category Deleted Successfully!")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        super(CategoryDeleteView, self).delete(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse_lazy('category:index')

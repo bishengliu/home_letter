@@ -13,13 +13,7 @@ class CategoryForm(forms.ModelForm):
         if not is_valid:
             msg = "Name contains only letters, numbers and underscores!"
             raise forms.ValidationError(_(msg))
-        # validate if name is unique
-        try:
-            Category.objects.get(name__iexact=self.cleaned_data.get('name'))
-            msg = "Name already taken, please choose a different name!"
-            raise forms.ValidationError(_(msg))
-        except Category.DoesNotExist:
-            return self.cleaned_data['name']
+        return self.cleaned_data['name']
 
     class Meta:
         model = Category

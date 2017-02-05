@@ -1,0 +1,62 @@
+{% extends "base.html"%}
+
+{% block content %}
+<div class="">
+    <div class="col-xs-12 col-sm-8">
+       <h3 class="text-info"><i class="fa fa-list-alt"></i><span> Category</span></h3>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <br class="hidden-xs"/>
+        <div class="pull-right">
+            <a href="{% url 'category:create' %}" class="btn btn-default" data-toggle="tooltip" title="ADD CATEGORY">
+                <i class="fa fa-plus-circle"></i>
+                <span>Category</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="table-responsible">
+    <table class="table table-hover table-striped table-condensed">
+        <thead class="thead-inverse">
+        <tr class="info">
+            <th>ICON</th>
+            <th>NAME</th>
+            <th>CREATED DATE</th>
+            <th>CREATED BY</th>
+            <th>DESCRIPTION</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in object_list %}
+            <tr>
+                <td><img src="{{category.icon.url}}" class="img-circle" alt="{{category.name}}" width="50" height="50"></td>
+                <td>{{category.name}}</td>
+                <td>{{category.date}}</td>
+                <td>{{category.user}}</td>
+                <td>{{category.note|linebreaks}}</td>
+                <td>
+                    {% if not category.in_use %}
+                    <a href="{% url 'category:edit' pk=category.pk %}" data-toggle="tooltip" title="EDIT THIS CATEGORY">
+                        <i class="fa fa-pencil-square-o"></i>
+                        <span>EDIT</span>
+                    </a>
+                    <br/>
+                    <a href="{% url 'category:delete' pk=category.pk %}" data-toggle="tooltip" title="REMOVE THIS CATEGORY">
+                        <i class="fa fa-trash-o"></i>
+                        <span>DELETE</span>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">
+                    <span class="text-center text-danger">NO CATEGORY FOUND!</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

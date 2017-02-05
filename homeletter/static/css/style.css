@@ -264,35 +264,35 @@ table.dataTable thead th.sorting_desc:after {
 
 
 
-.table tbody tr > td.success {
+.table tbody tr > th.success {
   background-color: #dff0d8 !important;
 }
 
-.table tbody tr > td.error {
+.table tbody tr > th.error {
   background-color: #f2dede !important;
 }
 
-.table tbody tr > td.warning {
+.table tbody tr > th.warning {
   background-color: #fcf8e3 !important;
 }
 
-.table tbody tr > td.info {
+.table tbody tr > th.info {
   background-color: #d9edf7 !important;
 }
 
-.table-hover tbody tr:hover > td.success {
+.table-hover tbody tr:hover > th.success {
   background-color: #d0e9c6 !important;
 }
 
-.table-hover tbody tr:hover > td.error {
+.table-hover tbody tr:hover > th.error {
   background-color: #ebcccc !important;
 }
 
-.table-hover tbody tr:hover > td.warning {
+.table-hover tbody tr:hover > th.warning {
   background-color: #faf2cc !important;
 }
 
-.table-hover tbody tr:hover > td.info {
+.table-hover tbody tr:hover > th.info {
   background-color: #c4e3f3 !important;
 }
 
