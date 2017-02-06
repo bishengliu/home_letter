@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # register user
 class RegisterView(View):
     form_class = RegistrationForm
-    template_name = "users/register.html"
+    template_name = "users/users-register.html"
 
     def get(self, request):
         form = self.form_class(None)
@@ -70,7 +70,7 @@ class RegisterView(View):
 # login user
 class LoginView(View):
     form_class = LoginForm
-    template_name = "users/login.html"
+    template_name = "users/users-login.html"
 
     def get(self, request):
         form = self.form_class(None)
@@ -108,7 +108,7 @@ class LogoutView(View):
 
 # update user model and profile
 class UpdateView(LoginRequiredMixin, View):
-    template_name = "users/update.html"
+    template_name = "users/users-update.html"
 
     def get(self, request, *args, **kwargs):
         # get the user
@@ -164,7 +164,7 @@ class UpdateView(LoginRequiredMixin, View):
 
 # change password
 class PasswordView(LoginRequiredMixin, View):
-    template_name = "users/password.html"
+    template_name = "users/users-password.html"
     form_class = PasswordForm
 
     def get(self, request, *args, **kwargs):

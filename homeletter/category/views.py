@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView
 from datetime import datetime
 from django.urls import reverse_lazy, reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 
@@ -36,7 +36,7 @@ class ActionMixin(object):
 
 class CategoryCreateView(LoginRequiredMixin, View):
     # validate user permission using mixin
-    template_name = "category/form.html"
+    template_name = "category/category-form.html"
     form_class = CategoryForm
 
     def get(self, request, *args, **kwargs):
@@ -74,7 +74,7 @@ class CategoryCreateView(LoginRequiredMixin, View):
 
 class CategoryEditView(LoginRequiredMixin, ActionMixin, UpdateView):
     # validate user permission using mixin
-    template_name = "category/form.html"
+    template_name = "category/category-form.html"
     form_class = CategoryForm
     model = Category
 
@@ -88,13 +88,14 @@ class CategoryEditView(LoginRequiredMixin, ActionMixin, UpdateView):
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
-    template_name = "category/index.html"
+    template_name = "category/category-index.html"
 
 
 class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
-    template_name = "category/delete.html"
-    success_message = _("Category Deleted Successfully!")
+    template_name = "category/category-delete.html"
+    success_message = _("CATEGORY DELETED SUCCESSFULLY!")
+    failed_message = _("CATEGORY NOT DELETED, PLEASE TRY AGAIN LATER!")
     success_url = reverse_lazy('category:index')
 
     def get_object(self, queryset=None):
@@ -104,13 +105,15 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
         return obj
 
     def delete(self, request, *args, **kwargs):
-        super(CategoryDeleteView, self).delete(request, *args, **kwargs)
-
-
-"""
-        self.object = get_object_or_404(Category, pk=kwargs['pk'])
-        success_url = self.get_success_url()
-        return HttpResponseRedirect(success_url)
-"""
-
-
+        # get the object
+        obj = get_object_or_404(Category, pk=kwargs['pk'])
+        try:
+            # delete icon
+            if obj.icon:
+                obj.icon.delete()
+            # delete the object
+            obj.delete()
+            messages.success(request, self.success_message)
+        except:
+            messages.error(request, self.failed_message_message)
+        return redirect("category:index")

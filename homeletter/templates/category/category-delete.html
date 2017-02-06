@@ -25,7 +25,6 @@
                                 {% if object.icon %}
                                     <img src="{{object.icon.url}}" class="img-circle" alt="{{object.name}}" width="50" height="50">
                                 {% endif %}
-
                             </td>
                             <td>{{object.name}}</td>
                             <td>{{object.date}}</td>
@@ -43,8 +42,8 @@
             <div class="col-xs-12 col-sm-4">
                 <form method="POST" action="{% url 'category:delete' pk=object.pk %}" class="pull-right">
                     {% csrf_token %}
-                    <button class="btn btn-danger" type="submit">
-                        <i class="fa fa-trash-o"></i>
+                    <button class="btn btn-default" type="submit">
+                        <i class="fa fa-trash-o text-danger"></i>
                         <span>DELETE</span>
                     </button>
                     |

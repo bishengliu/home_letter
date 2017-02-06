@@ -103,7 +103,7 @@
     <!-- messages-->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert-dismissable alert {% if message.tags %}alert-{{ message.tags }} {% else %} alert-info{% endif %}">
+            <div class="alert-dismissable alert {% if message.tags %} alert-{{ message.tags }} {% else %} alert-info {% endif %}" id="alert-message">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 {{ message }}
             </div>
@@ -133,6 +133,10 @@
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
+
+            $("#alert-message").fadeTo(2000, 500).slideUp(500, function(){
+                $("#success-alert").slideUp(500);
+            });
         });
     </script>
 {% endblock javascript %}
