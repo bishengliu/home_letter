@@ -1,6 +1,11 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: Rubik-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
+}
+
+h3{
+    font-family: Lalezar-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -333,4 +338,24 @@ table.dataTable thead th.sorting_desc:after {
     top: -2px;
     right: 0px;
     color: inherit;
+}
+
+.navbar-brand{
+font-family: Pacifico-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
+}
+
+
+@font-face{
+    font-family: Lalezar-Regular;
+    src: url('../fonts/Lalezar-Regular.ttf') format('truetype')
+}
+
+@font-face{
+    font-family: Pacifico-Regular;
+    src: url('../fonts/Pacifico-Regular.ttf') format('truetype')
+}
+
+@font-face{
+    font-family: Rubik-Regular;
+    src: url('../fonts/Rubik-Regular.ttf') format('truetype')
 }

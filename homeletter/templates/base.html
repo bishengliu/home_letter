@@ -41,7 +41,7 @@
                             <li>
                                  <a class="" href="{% url 'home'%}" data-toggle="tooltip" title="Application Home">
                                      <i class="fa fa-home"></i>
-                                     <span class="">Home</span>
+                                     <span class="">HOME</span>
                                  </a>
                              </li>
                             <!-- include navbar based on the global template tag 'app_navbar', which render navbar as string  -->
@@ -121,7 +121,7 @@
     <div class="footer navbar-fixed-bottom">
         <footer>
             {% block footer %}
-                <p class="text-center" style="margin: 0px 0px 0px 0px;">&copy; {% now "Y" %} - {{ appName }} ({{ appVersion }}{%if debug %}, <span class="text-danger"><em> &nbsp;{% app_setting_mode %}</em></span> {%endif%}). All Rights Reserved</p>
+                <p class="text-center" style="margin: 0px 0px 0px 0px;">&copy; {% now "Y" %} - {% app_version %} ({% app_version%}{%if debug %}, <span class="text-danger"><em> &nbsp;{% app_setting_mode %}</em></span> {%endif%}). All Rights Reserved</p>
             {% endblock footer %}
         </footer>
     </div>

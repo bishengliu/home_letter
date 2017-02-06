@@ -37,17 +37,17 @@
         </div>
         <div class="panel-footer">
             <div class="col-xs-12 col-sm-8">
-                <h4 class="text-danger">Are you sure to delete letter category: {{object}}?</h4>
+                <p class="text-danger">Are you sure to delete letter category: {{object}}?</p>
             </div>
             <div class="col-xs-12 col-sm-4">
                 <form method="POST" action="{% url 'category:delete' pk=object.pk %}" class="pull-right">
                     {% csrf_token %}
-                    <button class="btn btn-default" type="submit">
+                    <button class="btn btn-sm btn-default" type="submit">
                         <i class="fa fa-trash-o text-danger"></i>
                         <span>DELETE</span>
                     </button>
                     |
-                    <a class="btn btn-default" href="{% url 'category:index' %}">
+                    <a class="btn btn-default btn-sm" href="{% url 'category:index' %}">
                         <i class="fa fa-caret-left"></i>
                         <span>CANCEL</span>
                     </a>

@@ -172,8 +172,8 @@ MEDIA_ROOT = os.path.join(APPS_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # some variables, must be all capitals
-APPNAME = 'HomeLetter'
-APPVERSION = '0.0.1'
+APP_NAME = 'HomeLetter'
+APP_VERSION = '0.0.1'
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'

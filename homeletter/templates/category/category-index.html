@@ -3,7 +3,7 @@
 {% block content %}
 <div class="">
     <div class="col-xs-12 col-sm-8">
-       <h3 class="text-info"><i class="fa fa-list-alt"></i><span> Category</span></h3>
+       <h3 class="text-info"><i class="fa fa-list-alt"></i><span> Categories</span></h3>
     </div>
     <div class="col-xs-12 col-sm-4">
         <br class="hidden-xs"/>
@@ -15,6 +15,7 @@
         </div>
     </div>
 </div>
+
 <div class="table-responsible">
     <table class="table table-hover table-striped table-condensed">
         <thead class="thead-inverse">
@@ -24,7 +25,7 @@
             <th>CREATED DATE</th>
             <th>CREATED BY</th>
             <th>DESCRIPTION</th>
-            <th></th>
+            <th class="col-md-2"></th>
         </tr>
         </thead>
         <tbody>
@@ -32,7 +33,7 @@
             <tr>
                 <td>
                     {% if category.icon %}
-                        <img src="{{category.icon.url}}" class="img-circle" alt="{{category.name}}" width="50" height="50">
+                        <img src="{{category.icon.url}}" class="img-circle img-responsive" alt="{{category.name}}" width="50" height="50">
                     {% endif %}
                 </td>
                 <td>{{category.name}}</td>
@@ -41,12 +42,12 @@
                 <td>{{category.note|linebreaks}}</td>
                 <td>
                     {% if not category.in_use %}
-                    <a href="{% url 'category:edit' pk=category.pk %}" data-toggle="tooltip" title="EDIT THIS CATEGORY">
+                    <a href="{% url 'category:edit' pk=category.pk %}" data-toggle="tooltip" title="EDIT THIS CATEGORY" class="btn btn-xs btn-default">
                         <i class="fa fa-pencil-square-o"></i>
                         <span>EDIT</span>
                     </a>
-                    <br/>
-                    <a href="{% url 'category:delete' pk=category.pk %}" data-toggle="tooltip" title="REMOVE THIS CATEGORY">
+                     |
+                    <a href="{% url 'category:delete' pk=category.pk %}" data-toggle="tooltip" title="REMOVE THIS CATEGORY" class="btn btn-xs btn-default">
                         <i class="fa fa-trash-o"></i>
                         <span>DELETE</span>
                     </a>

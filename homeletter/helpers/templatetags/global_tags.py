@@ -16,6 +16,16 @@ def app_setting_mode():
         return "production"
 
 
+@register.simple_tag
+def app_name():
+    return settings.APP_NAME
+
+
+@register.simple_tag
+def app_version():
+    return settings.APP_VERSION
+
+
 # GET navbar based on app mode
 @register.simple_tag
 def app_navbar():

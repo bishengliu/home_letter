@@ -5,11 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView
 from datetime import datetime
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from homeletter.helpers.Mixins import FormActionMessageMixin
+from homeletter.helpers.Mixins import FormActionMessageMixin, OwnObjectMixin
 from .models import Category
 from .forms import CategoryForm
 
@@ -52,7 +52,7 @@ class CategoryCreateView(LoginRequiredMixin, View):
             return render(request, self.template_name, {'form': form})
 
 
-class CategoryEditView(LoginRequiredMixin, FormActionMessageMixin, UpdateView):
+class CategoryEditView(LoginRequiredMixin, OwnObjectMixin, FormActionMessageMixin, UpdateView):
     # validate user permission using mixin
     template_name = "category/category-form.html"
     form_class = CategoryForm
@@ -71,7 +71,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     template_name = "category/category-index.html"
 
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
     model = Category
     template_name = "category/category-delete.html"
     success_message = _("CATEGORY DELETED SUCCESSFULLY!")

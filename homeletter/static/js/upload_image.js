@@ -9,11 +9,11 @@ function uploadSize(name_id, msg_id) {
 
         //check the upload file format/exteions
         var type = $(name_id)[0].files[0].type;
-        if (type == "image/png" || type == "image/jpeg" || type == "image/tiff" || type == "image/bmp" || type == "image/gif") {
+        if (type == "image/png" || type == "image/jpeg" || type == "image/bmp" || type == "image/gif") {
             return true;
         }
         else {
-            $(msg_id).text('Only allow for ".bmp", ".jpg", ".tiff", ".gif" and ".png"!');
+            $(msg_id).text('Only allow for ".bmp", ".jpg", ".gif" and ".png"!');
             return false;
         }
     }

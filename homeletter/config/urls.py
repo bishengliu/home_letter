@@ -30,7 +30,7 @@ urlpatterns = [
     # home page
     url(r'^$',
         TemplateView.as_view(template_name='home.html'),
-        {"appVersion": settings.APPVERSION, "appName": settings.APPNAME}, # add "messages": ["Hello World"] to pass the messages to the template
+        # {"appVersion": settings.APP_VERSION, "appName": settings.APP_NAME},
         name="home"),  # home index
 
     # User management
