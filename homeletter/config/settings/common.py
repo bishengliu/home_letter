@@ -50,6 +50,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    'helpers.apps.HelpersConfig',
     'users.apps.UsersConfig',
     'letters.apps.LettersConfig',
     'category.apps.CategoryConfig'

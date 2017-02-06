@@ -9,29 +9,9 @@ from django.urls import reverse_lazy, reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-
+from homeletter.helpers.Mixins import FormActionMessageMixin
 from .models import Category
 from .forms import CategoryForm
-
-
-# mixin for message
-class ActionMixin(object):
-
-    @property
-    def success_msg(self):
-        return NotImplemented
-
-    @property
-    def fail_msg(self):
-        return NotImplemented
-
-    def form_valid(self, form):
-        messages.info(self.request, self.success_msg)
-        return super(ActionMixin, self).form_valid(form)
-
-    def form_invalid(self, form):
-        messages.info(self.request, self.fail_msg)
-        return super(ActionMixin, self).form_invalid(form)
 
 
 class CategoryCreateView(LoginRequiredMixin, View):
@@ -72,14 +52,14 @@ class CategoryCreateView(LoginRequiredMixin, View):
             return render(request, self.template_name, {'form': form})
 
 
-class CategoryEditView(LoginRequiredMixin, ActionMixin, UpdateView):
+class CategoryEditView(LoginRequiredMixin, FormActionMessageMixin, UpdateView):
     # validate user permission using mixin
     template_name = "category/category-form.html"
     form_class = CategoryForm
     model = Category
 
-    success_msg = _("Category Updated Successfully!")
-    fail_msg = _('Something went wrong, please try again later!')
+    success_msg = _("CATEGORY UPDATED SUCCESSFULLY!")
+    fail_msg = _('SOMETHING WENT WRONG, PLEASE TRY AGAIN LATER!')
 
     def form_valid(self, form):
         form.icon = self.request.FILES['icon'] if self.request.FILES else None # no need to change the icon name
