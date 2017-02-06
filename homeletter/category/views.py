@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from homeletter.helpers.Mixins import FormActionMessageMixin, OwnObjectMixin
+from homeletter.helpers.mixins import FormActionMessageMixin, OwnObjectMixin
 from .models import Category
 from .forms import CategoryForm
 
