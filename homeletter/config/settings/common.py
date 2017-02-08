@@ -184,3 +184,5 @@ DATE_INPUT_FORMATS = [
     '%m/%d/%Y',      # '10/25/2006'
     '%m/%d/%y',      # '10/25/06'
 ]
+
+LOGIN_URL = '/login'
