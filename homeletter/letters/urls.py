@@ -1,16 +1,11 @@
 from django.conf.urls import url
 from . import views
 
-urlpatterns = [
-    url(
+
+"""url(
         regex=r'^$',
         view=views.LetterIndexView.as_view(),
         name='index'
-    ),
-    url(
-        regex=r'^create$',
-        view=views.LetterCreateView.as_view(),
-        name='create'
     ),
     url(
         regex=r'^edit/(?P<pk>\d+)/$',
@@ -22,5 +17,12 @@ urlpatterns = [
         view=views.LetterDeleteView.as_view(),
         name='delete'
     )
+"""
 
+urlpatterns = [
+    url(
+        regex=r'^create$',
+        view=views.LetterCreateView.as_view(),
+        name='create'
+    )
 ]

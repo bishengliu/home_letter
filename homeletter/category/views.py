@@ -15,7 +15,6 @@ from .forms import CategoryForm
 
 
 class CategoryCreateView(LoginRequiredMixin, View):
-    # validate user permission using mixin
     template_name = "category/category-form.html"
     form_class = CategoryForm
 

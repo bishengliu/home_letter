@@ -3,7 +3,6 @@ from django.conf import settings
 from django.urls import reverse
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     icon = models.ImageField(upload_to='category/', max_length=100, null=True, blank=True)

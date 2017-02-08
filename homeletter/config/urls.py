@@ -55,9 +55,9 @@ urlpatterns = [
         name='login'
     ),
     # CATEGORY MANAGEMENT
-    url(r'category/', include('category.urls', namespace="category")),
+    url(r'^category/', include('category.urls', namespace="category")),
     # LETTER MANAGEMENT
-    # url(r'letter/', include('letters.urls', namespace="letters")),
+    url(r'^letter/', include('letters.urls', namespace="letters"))
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

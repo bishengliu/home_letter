@@ -52,8 +52,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'helpers.apps.HelpersConfig',
     'users.apps.UsersConfig',
+    'category.apps.CategoryConfig',
     'letters.apps.LettersConfig',
-    'category.apps.CategoryConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
