@@ -179,6 +179,7 @@ APP_VERSION = '0.0.1'
 ADMIN_URL = r'^admin/'
 
 DATE_INPUT_FORMATS = [
+    '%m-%d-%Y',      # '09-25-2008'
     '%d-%m-%Y',      # '25-09-2008'
     '%Y-%m-%d',      # '2006-10-25'
     '%m/%d/%Y',      # '10/25/2006'

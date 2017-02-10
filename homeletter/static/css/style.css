@@ -141,11 +141,13 @@ textarea {
 .form-group.required .control-label:after {
     content: "*";
     color: red;
+    font-family: Helvetica Neue, Helvetica,Arial,sans-serif;
 }
 
 .required:after {
     content: "*";
     color: red;
+    font-family: Helvetica Neue, Helvetica,Arial,sans-serif;
 }
 
 .noEvent

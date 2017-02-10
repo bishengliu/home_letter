@@ -30,7 +30,7 @@ class CategoryCreateView(LoginRequiredMixin, View):
             name = form.cleaned_data['name']
             note = form.cleaned_data['note']
             icon = request.FILES['icon'] if request.FILES else None # no need to change the icon name
-
+            category = Category()
             try:
                 category = Category.objects.create(
                     name=name,
@@ -43,7 +43,7 @@ class CategoryCreateView(LoginRequiredMixin, View):
                 messages.success(request, _('Category Created!'))
                 return redirect('category:index')
             except:
-                messages.info(request, _('Something went wrong, please try again!'))
+                messages.error(request, _('Something went wrong, please try again!'))
                 if icon is not None:
                     category.icon.delete()
                 return redirect('category:index')
@@ -61,7 +61,7 @@ class CategoryEditView(LoginRequiredMixin, OwnObjectMixin, FormActionMessageMixi
     fail_msg = _('SOMETHING WENT WRONG, PLEASE TRY AGAIN LATER!')
 
     def form_valid(self, form):
-        form.icon = self.request.FILES['icon'] if self.request.FILES else None # no need to change the icon name
+        form.icon = self.request.FILES['icon'] if self.request.FILES else None
         return super(CategoryEditView, self).form_valid(form)
 
 

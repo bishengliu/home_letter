@@ -1,8 +1,8 @@
 from django import forms
-from category.models import Category
-from .models import Letter
 from django.forms.widgets import Select
 
+from category.models import Category
+from .models import Letter
 
 class LetterForm(forms.ModelForm):
 
@@ -14,13 +14,14 @@ class LetterForm(forms.ModelForm):
         )
         """
 
-    def clean_favorite(self):
-        pass
+        self.fields['category'].empty_label = "PLEASE SELECT ..."
+
 
     class Meta:
         CHOICES = Category.objects.order_by('name').all()
         model = Letter
-        fields = ("category", 'name', 'file', 'date', 'favorite', 'note')
+        fields = ("category", 'name', 'file', 'date', 'note')
         widgets = {
             'category': Select(choices=((c.id, c.name) for c in CHOICES)),
         }
+

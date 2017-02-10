@@ -20,6 +20,13 @@ from . import views
 """
 
 urlpatterns = [
+
+    url(
+        regex=r'^$',
+        view=views.LetterIndexView.as_view(),
+        name='index'
+    ),
+
     url(
         regex=r'^create$',
         view=views.LetterCreateView.as_view(),

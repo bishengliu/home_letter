@@ -10,7 +10,7 @@
     </h3>
 </div>
 <div class="row">
-    <form class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit = "return uploadSize();">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="clearfix"></div>
         <div class="form-group required">
@@ -58,7 +58,7 @@
         <div class="form-group required">
             <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ upf.birth_date.id_for_label}}">Birth Date</label>
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
-                <input class="form-control datepicker" type="text" id="{{ upf.birth_date.id_for_label}}" name="{{upf.birth_date.html_name}}" value="{{upf.birth_date.value| date:'m-d-Y'|default_if_none:''}}">
+                <input class="form-control datepicker" type="text" id="{{ upf.birth_date.id_for_label}}" name="{{upf.birth_date.html_name}}" value="{{upf.birth_date.value| date:'Y-m-d'|default_if_none:''}}">
                 <span class="help-inline text-danger">
                     {% for error in upf.birth_date.errors %}{{ error }}{% endfor %}
                 </span>
@@ -82,7 +82,7 @@
                 <div class="input-group wideForm">
                     <input type="text" class="form-control" id="{{upf.photo.html_name}}_name" readonly>
                     <span class="input-group-btn">
-                        <label class="btn btn-primary btn-file">Browse <input type="file" name="{{upf.photo.html_name}}" id="{{upf.photo.html_name}}_fn" onchange="getFilePath()" class="hidden"></label>
+                        <label class="btn btn-primary btn-file">Browse <input type="file" name="{{upf.photo.html_name}}" id="{{upf.photo.html_name}}_fn" class="hidden"></label>
                     </span>
                  </div>
                 <small><p id="{{upf.photo.html_name}}_msg" class="text-danger "></p></small>
@@ -111,7 +111,8 @@
 {% endblock content %}
 {% block appJs %}
     <script src="{% static 'js/users/users.js' %}"></script>
-    <script src="{% static 'js/users/upload-photo.js' %}"></script>
+    <script src="{% static 'js/upload_image.js' %}"></script>
+    <script src="{% static 'js/users/upload_photo.js' %}"></script>
 {% endblock appJs%}
 
 

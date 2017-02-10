@@ -1,8 +1,9 @@
 $(".datepicker").datepicker({
-            //format: 'yyyy-mm-dd',
-            format: 'dd-mm-yyyy',
+            format: 'yyyy-mm-dd',
+            //format: 'mm-dd-yyyy',
             autoclose: true,
+            orientation: "bottom",
             startView: 'decade',
             minView: 'decade',
-            viewSelect: 'decade',
+            viewSelect: 'decade'
 });

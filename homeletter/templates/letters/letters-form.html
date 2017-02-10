@@ -2,5 +2,113 @@
 {% load staticfiles %}
 
 {% block content %}
-{{form}}
+<div class="row">
+    <h3 class="text-center text-info">
+        <i class="fa fa-envelope-o"></i>
+        <span> ADD LETTER</span>
+    </h3>
+</div>
+
+<div class="row">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="clearfix"></div>
+
+        <div class="form-group required">
+            <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ form.category.id_for_label}}">CATEGORY</label>
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
+                <select class="form-control" id="{{ form.category.id_for_label}}" name="{{form.category.html_name}}" required >
+                    {% for v,t in form.fields.category.choices %}
+                        <option value="{{ v }}" {% if form.fields.category.value == v %} selected {% endif %}>{{ t }}</option>
+                    {% endfor%}
+                </select>
+                <span class="help-inline text-danger">
+                    {% for error in form.category.errors %}{{ error }}{% endfor %}
+                </span>
+                <span class="help-inline">
+                    {% if form.category.help_text %}
+                        <small>{{ form.category.help_text }}</small>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ form.file.id_for_label}}">FILE</label>
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
+                <div class="input-group wideForm">
+                    <input type="text" class="form-control" id="{{ form.file.html_name}}_name" readonly required>
+                    <span class="input-group-btn">
+                        <label class="btn btn-primary btn-file">Browse <input type="file" name="{{ form.file.html_name }}" id="{{form.file.html_name}}_fn" class="hidden"></label>
+                    </span>
+                 </div>
+                <small><p id="{{form.file.html_name}}_msg" class="text-danger"></p></small>
+                <span class="help-inline text-danger">
+                    {% for error in form.file.errors %}{{ error }}{% endfor %}
+                </span>
+                <span class="help-inline">
+                    {% if form.file.help_text %}
+                        <small>{{ form.file.help_text }}</small>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ form.name.id_for_label }}">NAME</label>
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
+                <input class="form-control" type="text" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" value="{{ form.name.value|default_if_none:''}}" required>
+                <span class="help-inline text-danger">
+                    {% for error in form.name.errors %}{{ error }}{% endfor %}
+                </span>
+                <span class="help-inline">
+                    {% if form.name.help_text %}
+                            <small>{{ form.name.help_text }}</small>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ form.date.id_for_label}}">DATE</label>
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
+                <input class="form-control datepicker" type="text" id="{{ form.date.id_for_label }}" name="{{ form.date.html_name }}" value="{{ form.date.value|date:'Y-m-d'|default_if_none:''}}" required>
+                <span class="help-inline text-danger">
+                    {% for error in form.date.errors %}{{ error }}{% endfor %}
+                </span>
+                <span class="help-inline">
+                    {% if upf.birth_date.help_text %}
+                        <small>{{ form.date.help_text }}</small>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{form.note.id_for_label}}">NOTE</label>
+            <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
+                <textarea class="form-control" id="{{form.note.id_for_label}}" name="{{form.note.html_name}}" rows="4" cols="200">{{form.note.value|default_if_none:''}}</textarea>
+                <span class="help-inline text-danger">
+                    {% for error in form.note.errors %}{{ error }}{% endfor %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-offset-1 col-xs-10 col-sm-4 col-sm-offset-4 col-md-3 col-md-offset-5 col-lg-2 wideForm">
+                <button type="submit" class="btn btn-default btn-block">
+                    <i class="fa fa-plus-circle"></i>
+                    <span>LETTER</span>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
 {% endblock content %}
+{% block appJs %}
+    <script src="{% static 'js/letters/letters.js' %}"></script>
+    <script src="{% static 'js/upload_pdf.js' %}"></script>
+    <script src="{% static 'js/letters/upload_letter.js' %}"></script>
+{% endblock appJs%}
