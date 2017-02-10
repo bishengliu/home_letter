@@ -8,6 +8,7 @@ class LetterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(LetterForm, self).__init__(*args, **kwargs)
+        self.fields['date'].required = True
         """
         self.fields['category'] = forms.ChoiceField(
             choices=[(c.id, c.name) for c in Category.objects.order_by('name').all()]
