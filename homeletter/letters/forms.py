@@ -1,5 +1,5 @@
 from django import forms
-from homeletter.category.models import Category
+from category.models import Category
 from .models import Letter
 from django.forms.widgets import Select
 

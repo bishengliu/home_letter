@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from homeletter.helpers.mixins import FormActionMessageMixin, OwnObjectMixin
+from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
 
 #from .models import Letter
 from .forms import LetterForm

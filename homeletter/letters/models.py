@@ -9,7 +9,7 @@ class Letter(models.Model):
     category = models.ForeignKey(Category)
     name = models.CharField(max_length=250, unique=True)
     file = models.FileField(upload_to='letters/', max_length=250, null=True, blank=True)
-    date = models.DateField(auto_now_add=True, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     favorite = models.PositiveSmallIntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
