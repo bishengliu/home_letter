@@ -11,6 +11,7 @@ import os
 def upload_path_handler(instance, filename):
     return os.path.join('letters', str(datetime.now().year), str(Category.objects.get(pk=instance.category_id)), filename)
 
+
 class Letter(models.Model):
     category = models.ForeignKey(Category)
     name = models.CharField(max_length=250, unique=True)
@@ -23,6 +24,9 @@ class Letter(models.Model):
 
     def __str__(self):
         return self.name
+
+    def filename(self):
+        return os.path.basename(self.file.name)
 
     def get_absolute_url(self):
         return reverse('letters:index')

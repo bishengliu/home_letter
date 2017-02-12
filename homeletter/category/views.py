@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
 from .models import Category
 from .forms import CategoryForm
+from letters.models import Letter
 
 
 class CategoryCreateView(LoginRequiredMixin, View):
@@ -80,6 +81,9 @@ class CategoryDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
     def get_object(self, queryset=None):
         obj = super(CategoryDeleteView, self).get_object()
         if obj.in_use:
+            raise Http404
+        letters = Letter.objects.filter(category_id=obj.pk)
+        if letters.count() > 0:
             raise Http404
         return obj
 

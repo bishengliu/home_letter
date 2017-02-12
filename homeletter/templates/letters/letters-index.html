@@ -1,5 +1,112 @@
 {% extends "base.html"%}
-
+{% load staticfiles %}
 {% block content %}
 
+<div class="">
+    <div class="col-xs-12 col-sm-8">
+       <h3 class="text-info"><i class="fa fa-envelope-o"></i><span> LETTERS</span></h3>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <br class="hidden-xs"/>
+        <div class="pull-right">
+            <a href="{% url 'letters:create' %}" class="btn btn-default" data-toggle="tooltip" title="ADD LETTER">
+                <i class="fa fa-plus-circle"></i>
+                <span>LETTER</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsible">
+    <table class="table table-hover table-striped table-condensed">
+        <thead class="thead-inverse">
+        <tr class="info">
+            <th>NAME</th>
+            <th>CATEGORY</th>
+            <th>FILE</th>
+            <th>DATE</th>
+            <th>FAVOURITE</th>
+            <th>USER</th>
+            <th class="no-sort">NOTE</th>
+            <th class="col-md-2 no-sort"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for letter in object_list %}
+            <tr>
+                <td>{{letter.name}}</td>
+                <td>
+                    <span style="display:inline-block;vertical-align:top;">
+                        {% if letter.category.icon %}
+                            <img src="{{letter.category.icon.url}}" class="img-circle img-responsive" alt="{{letter.category.name}}" width="25" height="25">
+                        {% endif %}
+
+                    </span>
+                    <span style="display:inline-block;vertical-align:top;">{{letter.category}}</span>
+                </td>
+                <td>
+                    {% if letter.file %}
+                    <a href="{{letter.file.url}}" class="" alt="{{letter.name}}" >
+                        <i class="fa fa-download"></i>
+                        <span>
+                            {{letter.letter_name}}
+                        </span>
+                    </a>
+                    {% endif %}
+                </td>
+                <td>{{letter.date}}</td>
+                <td>
+                    <span class="hidden">{{letter.favorite}}</span>
+                    <div class="favorite">
+                        <button class="btn btn-xs btn-default decrease" data-toggle="tooltip" title="DECREASE">
+                                <i class="fa fa-minus-circle"></i>
+                        </button>
+                        {% if letter.favorite  >= 0 %}
+                            {% for f in letter.range1 %}
+                                <i class="fa fa-star text-yellow"></i>
+                            {% endfor %}
+                            {% for f in letter.range2 %}
+                                <i class="fa fa-star-o"></i>
+                            {% endfor %}
+                        {% endif %}
+                        <button class="btn btn-xs btn-default increase" data-toggle="tooltip" title="INCREASE!">
+                                <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </td>
+                 <td>{{letter.user|upper}}
+                 </td>
+                <td>{{category.note|linebreaks}}</td>
+                <td>
+                    <a href="{% url 'letters:detail' pk=letter.pk %}" data-toggle="tooltip" title="THIS LETTER DETAILS" class="btn btn-xs btn-default">
+                        <i class="fa fa-info"></i>
+                        <span>DETAIL</span>
+                    </a>
+                    {% if letter.user == request.user %}
+                    <a href="{% url 'letters:edit' pk=letter.pk %}" data-toggle="tooltip" title="EDIT THIS LETTER" class="btn btn-xs btn-default">
+                        <i class="fa fa-pencil-square-o"></i>
+                        <span>EDIT</span>
+                    </a>
+                    <a href="{% url 'letters:delete' pk=letter.pk %}" data-toggle="tooltip" title="DELETE THIS LETTER" class="btn btn-xs btn-default">
+                        <i class="fa fa-trash-o text-muted"></i>
+                        <span class="text-muted">DELETE</span>
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">
+                    <span class="text-center text-danger">NO LETTER FOUND!</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock content %}
+
+{% block appJs %}
+    <script src="{% static 'js/app_data_table.js' %}"></script>
+{% endblock appJs%}

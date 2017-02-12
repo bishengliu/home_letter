@@ -5,9 +5,11 @@ from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from django.contrib import messages
+from django.db import transaction
 
 from .models import Letter
 from .forms import LetterForm
+from category.models import Category
 
 
 class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
@@ -25,18 +27,25 @@ class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
             file = request.FILES['file'] if request.FILES else None
             letter = Letter()
             try:
-                letter = Letter.objects.create(
-                    user=request.user,
-                    date_created=datetime.now(),
-                    favorite=0,
-                    category=form.cleaned_data['category'],
-                    note=form.cleaned_data['note'],
-                    name=form.cleaned_data['name'],
-                    date=form.cleaned_data['date'],
-                    file=file
-                )
-                messages.success(request, _('LETTER UPLOADED SUCCESSFULLY!!'))
-                return redirect('letters:index')
+                with transaction.atomic():
+                    letter = Letter(
+                        user=request.user,
+                        date_created=datetime.now(),
+                        favorite=0,
+                        category=form.cleaned_data['category'],
+                        note=form.cleaned_data['note'],
+                        name=form.cleaned_data['name'],
+                        date=form.cleaned_data['date'],
+                        file=file
+                    )
+                    # update category in_use status
+                    category = Category.objects.get(pk=letter.category.pk)
+                    category.in_use = True
+                    letter.save()
+                    category.save()
+
+                    messages.success(request, _('LETTER UPLOADED SUCCESSFULLY!!'))
+                    return redirect('letters:index')
             except:
                 messages.error(request, _('SOMETHING WENT WRONG, PLEASE TRY AGAIN LATER!'))
                 if file is not None:
@@ -69,12 +78,31 @@ class LetterIndexView(LoginRequiredMixin, ListView):
     model = Letter
     template_name = 'letters/letters-index.html'
 
-"""
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        for l in qs:
+            # get the favorite range
+            if l.favorite >= 0:
+                l.range1 = range(l.favorite)
+                l.range2 = range(5 - l.favorite)
+            # get the letter upload basename
+            if l.file is not None:
+                l.letter_name = l.file.name.split('/')[-1]
+            else:
+                l.letter_name = ""
+
+
+        return qs
+
+
 class LetterEditView(LoginRequiredMixin, OwnObjectMixin, FormActionMessageMixin, UpdateView):
     pass
 
 
 class LetterDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
     pass
-"""
 
+
+class LetterDetailView(LoginRequiredMixin, DeleteView):
+    pass

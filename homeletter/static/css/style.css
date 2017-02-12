@@ -361,3 +361,7 @@ font-family: Pacifico-Regular, Helvetica Neue, Helvetica,Arial,sans-serif;
     font-family: Rubik-Regular;
     src: url('../fonts/Rubik-Regular.ttf') format('truetype')
 }
+
+.text-yellow{
+    color: #f3b449 !important;
+}
