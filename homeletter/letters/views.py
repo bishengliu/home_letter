@@ -91,8 +91,6 @@ class LetterIndexView(LoginRequiredMixin, ListView):
                 l.letter_name = l.file.name.split('/')[-1]
             else:
                 l.letter_name = ""
-
-
         return qs
 
 
