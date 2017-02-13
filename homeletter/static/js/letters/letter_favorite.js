@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('.favorite').each(function(){
-        $(this).click(function(){
+        $(this).click(function(e){
             var pk = +$(this).next().text();
             var fav = +$(this).prev().text();
             if(fav >=0 && fav <5 ){

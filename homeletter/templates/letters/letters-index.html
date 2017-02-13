@@ -25,7 +25,7 @@
             <th>CATEGORY</th>
             <th>FILE</th>
             <th>DATE</th>
-            <th class="col-md-1"FAVOURITE</th>
+            <th class="col-md-1">FAVOURITE</th>
             <th>USER</th>
             <th class="no-sort">NOTE</th>
             <th class="col-md-2 no-sort"></th>
@@ -47,7 +47,7 @@
                 <td>
                     {% if letter.file %}
                     <a href="{{letter.file.url}}" class="" alt="{{letter.name}}" >
-                        <i class="fa fa-download"></i>
+                        <i class="fa fa-file-pdf-o text-danger"></i>
                         <span>
                             {{letter.letter_name}}
                         </span>
@@ -71,7 +71,7 @@
                     </div>
                     <span class="hidden">{{letter.pk}}</span>
                 </td>
-                 <td>{{letter.user|upper}}
+                 <td class="noEvent">{{letter.user|upper}}
                  </td>
                 <td>{{category.note|linebreaks}}</td>
                 <td>
