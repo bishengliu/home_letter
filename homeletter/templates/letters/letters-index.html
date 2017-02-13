@@ -25,7 +25,7 @@
             <th>CATEGORY</th>
             <th>FILE</th>
             <th>DATE</th>
-            <th>FAVOURITE</th>
+            <th class="col-md-1"FAVOURITE</th>
             <th>USER</th>
             <th class="no-sort">NOTE</th>
             <th class="col-md-2 no-sort"></th>
@@ -58,21 +58,18 @@
                 <td>
                     <span class="hidden">{{letter.favorite}}</span>
                     <div class="favorite">
-                        <button class="btn btn-xs btn-default decrease" data-toggle="tooltip" title="DECREASE">
-                                <i class="fa fa-minus-circle"></i>
-                        </button>
-                        {% if letter.favorite  >= 0 %}
-                            {% for f in letter.range1 %}
-                                <i class="fa fa-star text-yellow"></i>
-                            {% endfor %}
-                            {% for f in letter.range2 %}
-                                <i class="fa fa-star-o"></i>
-                            {% endfor %}
-                        {% endif %}
-                        <button class="btn btn-xs btn-default increase" data-toggle="tooltip" title="INCREASE!">
-                                <i class="fa fa-plus-circle"></i>
-                        </button>
+                        <div class="noEvent">
+                            {% if letter.favorite  >= 0 %}
+                                {% for f in letter.range1 %}
+                                    <i class="fa fa-star text-yellow star noEvent"></i>
+                                {% endfor %}
+                                {% for f in letter.range2 %}
+                                    <i class="fa fa-star-o star noEvent"></i>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
+                    <span class="hidden">{{letter.pk}}</span>
                 </td>
                  <td>{{letter.user|upper}}
                  </td>
@@ -109,4 +106,5 @@
 
 {% block appJs %}
     <script src="{% static 'js/app_data_table.js' %}"></script>
+    <script src="{% static 'js/letters/letter_favorite.js' %}"></script>
 {% endblock appJs%}

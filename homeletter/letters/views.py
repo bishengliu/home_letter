@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
 from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
@@ -6,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from django.contrib import messages
 from django.db import transaction
+import json
 
 from .models import Letter
 from .forms import LetterForm
@@ -104,3 +106,22 @@ class LetterDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
 
 class LetterDetailView(LoginRequiredMixin, DeleteView):
     pass
+
+
+class LetterFavoriteView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            data = request.GET['favorite']
+            obj = json.loads(data)
+            fav = obj['fav']
+            pk = obj['pk']
+            # get the letter
+            letter = Letter.objects.get(pk=pk)
+            letter .favorite = fav
+            letter.save()
+
+            # return json res
+            return JsonResponse({'status': 'success'}, safe=False)
+        except:
+            return JsonResponse({'status': 'failure'}, safe=False)
