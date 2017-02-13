@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +7,7 @@ from django.views.generic import UpdateView, ListView, DeleteView
 from datetime import datetime
 from django.urls import reverse_lazy
 from django.http import Http404
-from django.shortcuts import get_object_or_404
+import os
 
 from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
 from .models import Category
@@ -92,11 +92,11 @@ class CategoryDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
         obj = get_object_or_404(Category, pk=kwargs['pk'])
         try:
             # delete icon
-            if obj.icon:
+            if obj.icon and os.path.isfile(obj.file.url):
                 obj.icon.delete()
             # delete the object
             obj.delete()
             messages.success(request, self.success_message)
         except:
-            messages.error(request, self.failed_message_message)
+            messages.error(request, self.failed_message)
         return redirect("category:index")

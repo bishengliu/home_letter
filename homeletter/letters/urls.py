@@ -34,11 +34,6 @@ urlpatterns = [
         name='delete'
     ),
     url(
-        regex=r'^detail/(?P<pk>\d+)/$',
-        view=views.LetterDetailView.as_view(),
-        name='detail'
-    ),
-    url(
         regex=r'^favorite/$',
         view=views.LetterFavoriteView.as_view(),
         name='favorite'

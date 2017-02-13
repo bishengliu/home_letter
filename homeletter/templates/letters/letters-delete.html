@@ -1,5 +1,94 @@
 {% extends "base.html"%}
 
 {% block content %}
+<div class="">
+    <h3 class="text-info"><i class="fa fa-trash-o"></i><span> Letter</span></h3>
+</div>
+<div class="panel-group">
+    <div class="panel panel-info">
+        <div class="panel-heading"></div>
+        <div class="panel-body">
+            <div class="table-responsible">
+                <table class="table table-hover table-striped table-condensed">
+                    <thead>
+                    <tr class="info">
+                        <th>NAME</th>
+                        <th>CATEGORY</th>
+                        <th>FILE</th>
+                        <th>DATE</th>
+                        <th class="col-md-1">FAVOURITE</th>
+                        <th>USER</th>
+                        <th class="no-sort">NOTE</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{letter.name}}</td>
+                            <td>
+                                <span style="display:inline-block;vertical-align:top;">
+                                    {% if letter.category.icon %}
+                                        <img src="{{letter.category.icon.url}}" class="img-circle img-responsive" alt="{{letter.category.name}}" width="25" height="25">
+                                    {% endif %}
+
+                                </span>
+                                <span style="display:inline-block;vertical-align:top;">{{letter.category}}</span>
+                            </td>
+                            <td>
+                                {% if letter.file %}
+                                <a href="{{letter.file.url}}" class="" alt="{{letter.name}}" >
+                                    <i class="fa fa-file-pdf-o text-danger"></i>
+                                    <span>
+                                        {{letter.letter_name}}
+                                    </span>
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td>{{letter.date}}</td>
+                            <td>
+                                <span class="hidden">{{letter.favorite}}</span>
+                                <div class="favorite">
+                                    <div class="noEvent">
+                                        {% if letter.favorite  >= 0 %}
+                                            {% for f in letter.range1 %}
+                                                <i class="fa fa-star text-yellow star noEvent"></i>
+                                            {% endfor %}
+                                            {% for f in letter.range2 %}
+                                                <i class="fa fa-star-o star noEvent"></i>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <span class="hidden">{{letter.pk}}</span>
+                            </td>
+                             <td class="noEvent">{{letter.user|upper}}
+                             </td>
+                            <td>{{category.note|linebreaks}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="col-xs-12 col-sm-8">
+                <p class="text-danger">Are you sure to delete letter category: {{object}}?</p>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <form method="POST" action="{% url 'letters:delete' pk=object.pk %}" class="pull-right">
+                    {% csrf_token %}
+                    <button class="btn btn-sm btn-default" type="submit">
+                        <i class="fa fa-trash-o text-danger"></i>
+                        <span>DELETE</span>
+                    </button>
+                    |
+                    <a class="btn btn-default btn-sm" href="{% url 'letters:index' %}">
+                        <i class="fa fa-caret-left"></i>
+                        <span>CANCEL</span>
+                    </a>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

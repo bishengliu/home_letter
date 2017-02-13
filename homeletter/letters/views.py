@@ -1,13 +1,15 @@
-from django.shortcuts import render,redirect
-from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, ListView, DeleteView
 from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from django.contrib import messages
 from django.db import transaction
 import json
+import os
 
 from .models import Letter
 from .forms import LetterForm
@@ -24,7 +26,6 @@ class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = LetterForm(request.POST)
-
         if form.is_valid():
             file = request.FILES['file'] if request.FILES else None
             letter = Letter()
@@ -56,25 +57,6 @@ class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
         else:
             return render(request, self.template_name, {'form': form})
 
-"""
-# GENERIC CLASS BASED VIEW
-# CANNOT DELETE UPLOADS WHEN EXCEPTION CAUGHT
-class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, CreateView):
-    template_name = "letters/letters-form.html"
-    form_class = LetterForm
-
-    success_msg = _("LETTER UPLOADED SUCCESSFULLY!")
-    fail_msg = _('SOMETHING WENT WRONG, PLEASE TRY AGAIN LATER!')
-
-    def form_valid(self, form):
-        form.file = self.request.FILES['file'] if self.request.FILES else None  # no need to change the icon name
-        # add extra fields
-        form.instance.user = self.request.user
-        form.instance.date_created = datetime.now()
-        form.instance.favorite = 0
-        return super(LetterCreateView, self).form_valid(form)
-"""
-
 
 class LetterIndexView(LoginRequiredMixin, ListView):
     model = Letter
@@ -96,18 +78,75 @@ class LetterIndexView(LoginRequiredMixin, ListView):
         return qs
 
 
-class LetterEditView(LoginRequiredMixin, OwnObjectMixin, FormActionMessageMixin, UpdateView):
-    pass
+class LetterEditView(LoginRequiredMixin, View):
+    template_name = "letters/letters-form.html"
+    form_class = LetterForm
+
+    def get(self, request, *args, **kwargs):
+        letter = get_object_or_404(Letter, pk=kwargs['pk'])
+        letter_name = letter.file.name.split('/')[-1]
+        form = LetterForm(instance=letter)
+        return render(request, self.template_name, {'form': form, 'letter_name': letter_name})
+
+    def post(self, request, *args, **kwargs):
+        form = LetterForm(request.POST)
+        letter = get_object_or_404(Letter, pk=kwargs['pk'])
+        if form.is_valid():
+            file = request.FILES['file'] if request.FILES else None
+            try:
+                letter.category=form.cleaned_data['category']
+                letter.date = form.cleaned_data['date']
+                letter.name = form.cleaned_data['name']
+                letter.note = form.cleaned_data['note']
+                if file is not None:
+                    if letter.file and os.path.isfile(letter.file.url):
+                        letter.file.delete()
+                    letter.file = file
+                letter.save()
+
+                messages.success(request, _('LETTER UPDATED SUCCESSFULLY!!'))
+                return redirect('letters:index')
+            except:
+                messages.error(request, _('SOMETHING WENT WRONG, PLEASE TRY AGAIN LATER!'))
+                return redirect('letters:index')
+        else:
+            return render(request, self.template_name, {'form': form})
 
 
 class LetterDeleteView(LoginRequiredMixin, OwnObjectMixin, DeleteView):
-    pass
+    model = Letter
+    template_name = "letters/letters-delete.html"
+    success_message = _("LETTER DELETED SUCCESSFULLY!")
+    failed_message = _("LETTER NOT DELETED, PLEASE TRY AGAIN LATER!")
+    success_url = reverse_lazy('letters:index')
+
+    def get_object(self, queryset=None):
+        obj = super(LetterDeleteView, self).get_object()
+        if obj.favorite >= 0:
+            obj.range1 = range(obj.favorite)
+            obj.range2 = range(5 - obj.favorite)
+        # get the letter upload basename
+        if obj.file is not None:
+            obj.letter_name = obj.file.name.split('/')[-1]
+        else:
+            obj.letter_name = ""
+        return obj
+
+    def delete(self, request, *args, **kwargs):
+        # get the object
+        letter = get_object_or_404(Letter, pk=kwargs['pk'])
+        try:
+            # delete file
+            if letter.file and os.path.isfile(letter.file.url):
+                letter.file.delete()
+            letter.delete()
+            messages.success(request, self.success_message)
+        except:
+            messages.error(request, self.failed_message)
+        return redirect("letters:index")
 
 
-class LetterDetailView(LoginRequiredMixin, DeleteView):
-    pass
-
-
+# ajax call
 class LetterFavoriteView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):

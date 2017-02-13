@@ -19,7 +19,7 @@
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
                 <select class="form-control" id="{{ form.category.id_for_label}}" name="{{form.category.html_name}}" required >
                     {% for v,t in form.fields.category.choices %}
-                        <option value="{{ v }}" {% if form.fields.category.value == v %} selected {% endif %}>{{ t }}</option>
+                        <option value="{{ v }}" {% if form.instance.category.pk == v %} selected {% endif %}>{{ t }}</option>
                     {% endfor%}
                 </select>
                 <span class="help-inline text-danger">
@@ -37,7 +37,7 @@
             <label class="control-label col-xs-offset-1 col-sm-offset-0 col-sm-4 col-md-5 col-lg-5" for="{{ form.file.id_for_label}}">FILE</label>
             <div class="col-xs-offset-1 col-xs-10 col-sm-offset-0 col-sm-4 col-md-3 col-lg-2 wideForm">
                 <div class="input-group wideForm">
-                    <input type="text" class="form-control" id="{{ form.file.html_name}}_name" readonly required>
+                    <input type="text" class="form-control" id="{{ form.file.html_name}}_name" value="{{ letter_name }}" readonly required>
                     <span class="input-group-btn">
                         <label class="btn btn-primary btn-file">Browse <input type="file" name="{{ form.file.html_name }}" id="{{form.file.html_name}}_fn" class="hidden"></label>
                     </span>
