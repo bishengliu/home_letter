@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, DeleteView
 from helpers.mixins import FormActionMessageMixin, OwnObjectMixin
@@ -21,8 +21,13 @@ class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
     form_class = LetterForm
 
     def get(self, request, *args, **kwargs):
-        form = LetterForm()
-        return render(request, self.template_name, {'form': form})
+        param = self.kwargs.get('category_pk', None)
+        if param is not None:
+            form = LetterForm()
+            return render(request, self.template_name, {'form': form, 'category_pk': int(param)})
+        else:
+            form = LetterForm()
+            return render(request, self.template_name, {'form': form })
 
     def post(self, request, *args, **kwargs):
         form = LetterForm(request.POST)
@@ -61,8 +66,13 @@ class LetterCreateView(LoginRequiredMixin, FormActionMessageMixin, View):
 class LetterIndexView(LoginRequiredMixin, ListView):
     model = Letter
     template_name = 'letters/letters-index.html'
+    category_pk = None
 
     def get_queryset(self):
+        p = self.kwargs.get('category_id', None)
+        if p is not None and int(p) > 0:
+            self.queryset = Letter.objects.filter(category_id__exact=int(p))
+            self.category_pk = int(p)
         qs = super().get_queryset()
 
         for l in qs:

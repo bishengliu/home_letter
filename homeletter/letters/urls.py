@@ -2,22 +2,22 @@ from django.conf.urls import url
 from . import views
 
 
-"""url(
-        regex=r'^$',
+urlpatterns = [
+    url(
+        regex=r'^(?P<category_id>\d+)/$',
         view=views.LetterIndexView.as_view(),
         name='index'
     ),
-
-"""
-
-urlpatterns = [
-
     url(
         regex=r'^$',
         view=views.LetterIndexView.as_view(),
         name='index'
     ),
-
+    url(
+        regex=r'^create/(?P<category_pk>\d+)/$',
+        view=views.LetterCreateView.as_view(),
+        name='create'
+    ),
     url(
         regex=r'^create$',
         view=views.LetterCreateView.as_view(),

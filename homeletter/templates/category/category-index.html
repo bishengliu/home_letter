@@ -41,7 +41,7 @@
                 <td>{{category.user|upper}}</td>
                 <td>{{category.note|linebreaks}}</td>
                 <td>
-                    {% if not category.in_use %}
+                    {% if category.letter_set.count == 0 %}
                     <a href="{% url 'category:edit' pk=category.pk %}" data-toggle="tooltip" title="EDIT THIS CATEGORY" class="btn btn-xs btn-default">
                         <i class="fa fa-pencil-square-o"></i>
                         <span>EDIT</span>
@@ -50,6 +50,11 @@
                     <a href="{% url 'category:delete' pk=category.pk %}" data-toggle="tooltip" title="REMOVE THIS CATEGORY" class="btn btn-xs btn-default">
                         <i class="fa fa-trash-o"></i>
                         <span>DELETE</span>
+                    </a>
+                    {% else%}
+                    <a href="{% url 'letters:index' category_id=category.pk %}" data-toggle="tooltip" title="SHOW TOTAL {{category.letter_set.count}} LETTERS IN THIS CATEGORY" class="btn btn-xs btn-default">
+                        <i class="fa fa-envelope-o text-danger"></i>
+                        <span>LETTERS <span class="label label-primary">{{category.letter_set.count}}</span></span>
                     </a>
                     {% endif %}
                 </td>
