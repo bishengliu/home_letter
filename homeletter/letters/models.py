@@ -14,7 +14,7 @@ def upload_path_handler(instance, filename):
 
 class Letter(models.Model):
     category = models.ForeignKey(Category)
-    name = models.CharField(max_length=250, unique=True)
+    name = models.CharField(max_length=250)
     file = models.FileField(upload_to=upload_path_handler, max_length=250, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
