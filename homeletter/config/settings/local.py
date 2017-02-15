@@ -11,6 +11,7 @@ from .common import *
 APPNAME = 'HomeLetter'
 APPVERSION = '0.0.1'
 
+
 # define app mode
 APP_MODE = 'local'
 

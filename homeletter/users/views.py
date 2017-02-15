@@ -62,7 +62,7 @@ class RegisterView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('home')
+                    return redirect('home:index')
 
         return render(request, self.template_name, {'form': form})
 
@@ -87,7 +87,7 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('home')
+                    return redirect('home:index')
                 else:
                     messages.add_message(request, messages.WARNING,
                                          _('User is disabled!'))
@@ -103,7 +103,7 @@ class LogoutView(View):
 
     def get(self, request):
         logout(request)
-        return redirect('home')
+        return redirect('home:index')
 
 
 # update user model and profile
@@ -179,7 +179,7 @@ class PasswordView(LoginRequiredMixin, View):
             user.set_password(form.cleaned_data.get('password1'))
             user.save()
             messages.success(request, _('Your password was successfully changed!'))
-            return redirect('home')
+            return redirect('home:index')
         else:
             return render(request, self.template_name, {'form': form})
 

@@ -35,13 +35,13 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                      </button>
-                    <a class = "navbar-brand" href = "{% url 'home'%}">HomeLetter</a>
+                    <a class = "navbar-brand" href = "{% url 'home:index'%}">HomeLetter</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     {% block navbar%}
                         <ul class="nav navbar-nav">
                             <li>
-                                 <a class="" href="{% url 'home'%}" data-toggle="tooltip" title="Application Home">
+                                 <a class="" href="{% url 'home:index'%}" data-toggle="tooltip" title="Application Home">
                                      <i class="fa fa-home"></i>
                                      <span class="">HOME</span>
                                  </a>

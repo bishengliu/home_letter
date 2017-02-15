@@ -22,16 +22,14 @@ from django.views import defaults as default_views
 
 # import views from users app
 from users import views as users_view
-urlpatterns = [
+from home import views as home_view
 
+urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
 
-    # home page
-    url(r'^$',
-        TemplateView.as_view(template_name='home.html'),
-        # {"appVersion": settings.APP_VERSION, "appName": settings.APP_NAME},
-        name="home"),  # home index
+    # home app
+    url(r'^$', include('home.urls', namespace="home")),
 
     # User management
     url(r'^user/', include('users.urls', namespace="users")),
