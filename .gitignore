@@ -1,4 +1,5 @@
 *.pyc
 *~
 __pycache__git
+media
 .DS_Store
