@@ -8,6 +8,8 @@ from .common import *
 APPNAME = 'HomeLetter'
 APPVERSION = '0.0.1'
 
+DEBUG = False
+
 # define app mode
 APP_MODE = 'production'
 
@@ -19,3 +21,6 @@ INTERNAL_IPS = (
 
 # message level
 MESSAGE_LEVEL = 10  # DEBUG
+
+
+
