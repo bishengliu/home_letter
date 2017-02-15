@@ -1,6 +1,4 @@
 *.pyc
 *~
 __pycache__git
-db.sqlite3
-/media
 .DS_Store
