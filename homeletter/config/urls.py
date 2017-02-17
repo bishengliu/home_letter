@@ -29,7 +29,7 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
 
     # home app
-    url(r'^$', include('home.urls', namespace="home")),
+    url(r'^', include('home.urls', namespace="home")),
 
     # User management
     url(r'^user/', include('users.urls', namespace="users")),
