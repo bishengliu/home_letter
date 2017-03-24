@@ -2,6 +2,74 @@
 {% extends "base.html"%}
 {% block content %}
     <h3 class="text-center text-info">Welcome to Digital Letters!</h3>
-<h3 class="text-primary"><i class="fa fa-envelope-o"></i><span> RECENT LETTERS</span></h3>
-{{letters}}
+<h3 class="text-primary"><i class="fa fa-envelope-o"></i><span> RECENT 20 LETTERS</span></h3>
+
+<div class="table-responsible">
+    <table class="table table-hover table-striped table-condensed">
+        <thead class="thead-inverse">
+        <tr class="info">
+            <th>NAME</th>
+            <th>CATEGORY</th>
+            <th>FILE</th>
+            <th>DATE</th>
+            <th class="col-md-1">FAVOURITE</th>
+            <th>USER</th>
+            <th class="no-sort">NOTE</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for letter in letters %}
+            <tr>
+                <td>{{letter.name}}</td>
+                <td>
+                    <span style="display:inline-block;vertical-align:top;">
+                        {% if letter.category.icon %}
+                            <img src="{{letter.category.icon.url}}" class="img-circle img-responsive" alt="{{letter.category.name}}" width="25" height="25">
+                        {% endif %}
+
+                    </span>
+                    <span style="display:inline-block;vertical-align:top;">{{letter.category}}</span>
+                </td>
+                <td>
+                    {% if letter.file %}
+                    <a href="{{letter.file.url}}" class="" alt="{{letter.name}}" >
+                        <i class="fa fa-file-pdf-o text-danger"></i>
+                        <span>
+                            {{letter.letter_name}}
+                        </span>
+                    </a>
+                    {% endif %}
+                </td>
+                <td>{{letter.date}}</td>
+                <td>
+                    <span class="hidden">{{letter.favorite}}</span>
+                    <div class="favorite">
+                        <div class="noEvent">
+                            {% if letter.favorite  >= 0 %}
+                                {% for f in letter.range1 %}
+                                    <i class="fa fa-star text-yellow star noEvent"></i>
+                                {% endfor %}
+                                {% for f in letter.range2 %}
+                                    <i class="fa fa-star-o star noEvent"></i>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="hidden">{{letter.pk}}</span>
+                </td>
+                 <td class="noEvent">{{letter.user|upper}}
+                 </td>
+                <td>{{category.note|linebreaks}}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">
+                    <span class="text-center text-danger">NO LETTER FOUND!</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock content %}
